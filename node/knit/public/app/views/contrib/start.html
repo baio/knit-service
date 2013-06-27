@@ -1,0 +1,225 @@
+<div>
+<div id="_body">
+    <div class="container-fluid" style="margin-top: 30px" data-bind="ifnot: name">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="row-fluid">
+                    <h2>Вы должны <a href="/auth/twitter" data-default-focus="">войти в систему</a>, перед тем как редактировать данные</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="margin-top: 30px" data-bind="if: name">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="row-fluid">
+                    <h5>Привет <span data-bind="text: name"></span>, <span data-bind="with:contribs">
+                        <a href="#" data-bind="click: startCreate" data-default-focus="">кликни
+                        здесь</a></span>
+                        для того чтобы создать новый набор данных.</h5>
+                    <h5>Или выбери что нибудь для редактирования, также можешь создать новый <span
+                            data-bind="with:graphs"><a href="#" data-bind="click: startCreate">граф</a></span>.</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="row-fluid" data-bind="with: contribs">
+                    <div class="widget wviolet" data-bind="droppable: list, droppableOpts : {appendToList : false}">
+
+                        <div class="widget-head">
+                            <div class="pull-left">Наборы данных</div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="widget-content">
+
+                            <table class="table">
+                                <tbody data-bind="foreach: list">
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-mini btn-danger" href="#" data-bind="click: startRemove">
+                                            <i class="icon-remove"></i>
+                                        </a>
+                                    </td>
+                                    <td data-bind="draggable: { item: $data, parentList: $parent.list }">
+                                        <a href="#/contrib/item" data-bind="link: ref"><span
+                                                data-bind="text: name"></span>&nbsp;<small data-bind="displaydate: date" style="color: gray"></small></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="row-fluid" data-bind="with: graphs">
+                    <div class="widget wlightblue">
+
+                        <div class="widget-head">
+                            <div class="pull-left">Графы</div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="widget-content">
+
+                            <table class="table">
+                                <tbody data-bind="foreach: list">
+                                <tr>
+                                    <td>
+                                        <div class="widget wviolet"
+                                             data-bind="droppable: contribs, droppableOpts : {compareField : 'ref',
+                                             afterAppend: function(list, item) { $data.dropUpdate(list, item) }}">
+
+                                            <div class="widget-head">
+                                                <div class="pull-left"><a href="#" data-bind="click: startUpdate" style="color: white"><span
+                                                        data-bind="text: name"></span>&nbsp;<small
+                                                        data-bind="displaydate: date"></small></a>
+                                                </div>
+                                                <div class="widget-icons pull-right">
+                                                    <a href="#" class="wminimize" data-bind="click: $parent.switchContentShown"><i class="icon-chevron-down"></i></a>
+                                                    <a href="#" class="wclose" data-bind="click: startRemove"><i
+                                                            class="icon-remove"></i></a>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+
+                                            <div class="widget-content" style="display: none">
+
+                                                <table class="table">
+                                                    <tbody class="container" data-bind="foreach: contribs">
+                                                    <tr data-bind="draggable: {item: $data, parentList: $parent.contribs}, draggableOpts : {removeFromList : true, afterRemove: function(list, item) { $parent.dropUpdate(list, item) }}">
+                                                        <td>
+                                                            <a href="#/contrib/item" data-bind="link: ref"><span
+                                                                    data-bind="text: name"></span>&nbsp;<small data-bind="displaydate: date"></small></a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="contrib-graph-item">
+    <li>
+        <input type="checkbox" data-bind="checked: isSelected"><span data-bind="text: name"></span>
+    </li>
+</script>
+<div class="modal hide fade" data-form-type='delete' data-form-resource='graph'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Вы уверены?</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <h2>Граф будет удален.</h2>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel" data-default-focus>Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: remove">Удалить</a>
+    </div>
+</div>
+
+<div class="modal hide fade" data-form-type='create' data-form-resource='contrib'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Новый набор</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputName">Имя</label>
+
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name"
+                         style="display: none;"></div>
+                    <input type="text" id="inputName" placeholder="Name" data-bind="value: name" class="mousetrap">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Создать</a>
+    </div>
+</div>
+
+<div class="modal hide fade" data-form-type='delete' data-form-resource='contrib'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Вы уверены?</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <h2>Все данные набора будут утеряны.</h2>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel" data-default-focus>Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: remove">Удалить</a>
+    </div>
+</div>
+
+<div class="modal hide fade" data-form-type='create' data-form-resource='graph'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Новый граф</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputGraphName">Имя</label>
+
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name"
+                         style="display: none;"></div>
+                    <input type="text" id="inputGraphName" placeholder="Name" data-bind="value: name">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
+    </div>
+</div>
+
+<div class="modal hide fade" data-form-type='update' data-form-resource='graph'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Редактировать граф</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputGraphName">Name</label>
+
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name"
+                         style="display: none;"></div>
+                    <input type="text" id="inputUpdGraphName" placeholder="Name" data-bind="value: name">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
+    </div>
+</div>
+
+</div>

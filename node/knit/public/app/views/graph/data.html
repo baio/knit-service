@@ -1,0 +1,75 @@
+<div id="_body">
+
+    <div class="widget wlightblue">
+
+        <div class="widget-head">
+            <div class="pull-left"><a href="#/graph/panel" data-bind="text: name, link: ref" style="color: white"></a>&nbsp;
+                //&nbsp;<span style="font-size: 12px" data-bind="displaydate: date"></span></div>
+            <div class="clearfix"></div>
+            <div class="pull-left" style="font-size: 12px">Описание графа здесь</div>
+            <div class="widget-icons pull-right" style="margin-top: -20px" data-bind="with: contribs">
+                <a type="submit" href="#" data-bind="click: startCreate" style="font-size: 12px;">создать набор</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="widget-content">
+
+            <table class="table" data-bind="with: contribs">
+                <tbody id="items_list" data-bind="foreach: list">
+                    <tr>
+                        <td>
+                            <div>
+                            <a href="#/contrib/item" data-bind="link: ref"><span data-bind="text: name"></span>&nbsp;
+                                <small data-bind="displaydate: date"></small></a>
+                            </div>
+                            <div>
+                                <small>описание набора данных здесь</small>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal hide fade" data-form-type='create' data-form-resource='contrib'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Создать набор данных</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputName">Имя</label>
+
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name" style="display: none;"></div>
+                    <input type="text" id="inputName" data-bind="value: name">
+                </div>
+            </div>
+            <!--
+            <div class="control-group">
+                <label class="control-label" for="inputUrl">Ссылка</label>
+
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: url" style="display: none;"></div>
+                    <input type="text" id="inputUrl" data-bind="value: url">
+                </div>
+            </div>
+            -->
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
+    </div>
+</div>
+<script type="text/html" id="contrib-graph-item">
+    <li>
+        <input type="checkbox" data-bind="checked: isSelected"><span data-bind="text: name"></span>
+    </li>
+</script>

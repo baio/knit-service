@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Knit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+    <link href="assets/css/toastr.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/widgets.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/jquery.tagit.css" rel="stylesheet">
+    <link href="assets/css/site.css" rel="stylesheet">
+
+
+    <script src="assets/js/jquery-2.0.0.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/async.js"></script>
+    <script src="assets/js/knockout-2.2.1.js"></script>
+    <script src="assets/js/knockout.mapping-latest.js"></script>
+    <script src="assets/js/knockout.validation.js"></script>
+    <script src="assets/js/signals.min.js"></script>
+    <script src="assets/js/crossroads.min.js"></script>
+    <script src="assets/js/amplify.min.js"></script>
+    <script src="assets/js/toastr.min.js"></script>
+    <script src="assets/js/jsrender.js"></script>
+    <script src="assets/js/mousetrap.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/jstorage.min.js"></script>
+    <script src="assets/js/tag-it.js"></script>
+    <script type="text/javascript" src="assets/js/d3.v2.js"></script>
+    <script type="text/javascript" src="assets/js/tag-it.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.watch-2.0.js"></script>
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<input type="text" autocomplete="off" class="tm-input" name="tag-input" id="tag_input">
+<!--<input name="tags" id="tags" value="foo,bar,baz" placeholder="Связь" disabled="disabled" />-->
+<ul id="myTags">
+    <li>Tag1</li>
+    <li>Tag2</li>
+</ul>
+
+
+<script type="text/javascript">
+    $("#myTags").tagit();
+    $("#myTags").watch('disabled', function(){
+       console.log("disabled 1");
+    });
+    $("#tag_input").watch('disabled', function(){
+        console.log("disabled 2");
+    });
+    $("#myTags").attr('disabled', 'disabled');
+    $("#tag_input").attr('disabled', 'disabled');
+
+    /*
+    $('#tags').tagsInput({
+        height: '10px',
+        'defaultText':'Связь'
+    });
+    */
+    /*
+    jQuery(".tm-input").tagsManager({
+        typeahead: true,
+        typeaheadSource: ["Pisa", "Rome", "Milan", "Florence", "New York", "Paris", "Berlin", "London", "Madrid"],
+        prefilled: ["Pisa", "Rome"]
+    });
+    */
+</script>
+</body>
+
+</html>

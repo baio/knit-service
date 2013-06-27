@@ -1,0 +1,95 @@
+/*
+ {
+ "settings": {
+ "analysis": {
+ "analyzer": {
+ "autocomplete": {
+ "type": "custom",
+ "tokenizer": "engram",
+ "filter": ["lowercase"]
+ }
+ }
+ ,
+ "tokenizer": {
+ "engram": {
+ "type": "edgeNGram",
+ "min_gram": 2,
+ "max_gram": 10
+ }
+ }
+ }
+ },
+ "mappings": {
+ "gov-ru": {
+ "properties": {
+ "nm": {
+ "type": "string",
+ "index_analyzer": "autocomplete",
+ "index": "analyzed",
+ "search_analyzer": "standard"
+ },
+ "val": {
+ "type": "string"
+ }
+ }
+ }
+ }
+ }
+ */
+/*
+ {
+ "query" : {
+ "fuzzy" : {
+ "val.autocomplete" : "ham"
+ }
+ }
+ }
+ */
+{
+    "mappings": {
+        "name": {
+            "properties": {
+                "val": {
+                    "fields": {
+                        "autocomplete": {
+                            "search_analyzer": "val_search",
+                            "index_analyzer": "val_index",
+                            "type": "string"
+                        },
+                        "val": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        }
+                    },
+                    "type": "multi_field"
+                }
+            }
+        }
+    },
+    "settings": {
+        "analysis": {
+            "filter": {
+                "val_ngram": {
+                    "max_gram": 20,
+                    "min_gram": 2,
+                    "type": "edge_ngram"
+                }
+            },
+            "analyzer": {
+                "val_index": {
+                    "filter": [
+                        "lowercase",
+                        "val_ngram"
+                    ],
+                    "tokenizer": "keyword"
+                },
+                "val_search": {
+                    "filter": [
+                        "lowercase"
+                    ],
+                    "tokenizer": "keyword"
+                }
+            }
+        }
+    }
+}

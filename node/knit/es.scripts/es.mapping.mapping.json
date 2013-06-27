@@ -1,0 +1,12 @@
+{
+    "gov-ru": {
+        "properties": {
+            "val": {
+                "type": "string",
+                "index_analizer": "autocomplete",
+                "index": "analyzed",
+                "search_analyzer": "standard"
+            }
+        }
+    }
+}

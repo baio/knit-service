@@ -1,0 +1,106 @@
+<div>
+
+    <div class="container-fluid" style="margin-top: 30px" id="_body">
+        <div class="row-fluid">
+            <div class="span12">
+                <!-- ko with: contrib -->
+                <div class="row-fluid">
+                    <h2>Modify contrib, <a data-bind="text: name, click: startUpdate"></a></h2>
+                </div>
+                <div class="row-fluid">
+                    <div class="span11">
+                        <!-- ko with: $parent -->
+                        <a id="save_button" class="btn btn-primary btn-large"
+                           data-bind="click: save, css : {disabled : !isModifyed()}">Save</a>
+                        <!-- /ko -->
+                        <a href="#" data-bind="attr : {href : url}, text: date" target="_blank"></a>
+                    </div>
+                </div>
+                <!-- /ko -->
+                <div data-bind="template: {name: 'contrib-edit-item-template', data: editItem}"></div>
+                <div id="items_list" data-bind="template: { name: 'contrib-item-template', foreach: list}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="contrib-edit-item-template">
+        <div class="row-fluid">
+            <div class="span1">
+                <div data-bind="ifnot: isValid()">
+                    <a href="#" data-bind="tooltip : errors"><i class="icon-warning-sign"></i></a>
+                    <p data-bind="text: errors().length"></p>
+                </div>
+            </div>
+            <div class="span2">
+                <input type="text" id="append_item_focus" class="input-xarge name-input" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-xarge name-input" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-small" data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-small" data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" id="append_item_trigger"  class="input-small mousetrap" data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"/>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="contrib-item-template">
+        <div class="row-fluid" data-bind="if: !_isRemoved()">
+            <div class="span1">
+                <div data-bind="ifnot: isValid()">
+                    <a href="#" data-bind="tooltip : errors"><i class="icon-warning-sign"></i></a>
+                    <p data-bind="text: errors().length"></p>
+                </div>
+                <div>
+                    <a href="#" data-bind="click: remove"><i class="icon-remove"></i></a>
+                </div>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-xarge name-input" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-xarge name-input" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-small" data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-small" data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-small" data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"/>
+            </div>
+        </div>
+    </script>
+</div>
+
+<div class="modal hide fade" data-form-type='update' data-form-resource='contrib'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Edit contib</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputName">Name</label>
+                <div class="controls">
+                    <input type="text" id="inputName" placeholder="Name" data-bind="value: name">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputUrl">Url</label>
+                <div class="controls">
+                    <input type="text" id="inputUrl" placeholder="Url" data-bind="value: url">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Close</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Save</a>
+    </div>
+</div>

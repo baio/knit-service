@@ -1,0 +1,14 @@
+{"query": {
+    "bool": {
+        "must": {
+            "fuzzy": {
+                "val.autocomplete": "tezt"
+            }
+        },
+        "must": {
+            "field": {
+                "type": "sick"
+            }
+        }
+    }
+}}

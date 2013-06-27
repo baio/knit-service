@@ -1,0 +1,78 @@
+<div xmlns="http://www.w3.org/1999/html">
+
+    <div class="widget wviolet" id="_body">
+
+        <div class="widget-head">
+            <div class="pull-left" data-bind="with: contrib"><a href="#" data-bind="text: name, click: startUpdate"
+                                                                style="color: mediumturquoise"></a>&nbsp;//<span
+                    style="font-size: 12px"> 21 марта 2013</span></div>
+            <div class="clearfix"></div>
+            <div class="pull-left" style="font-size: 12px">Описание набора данных здесь</div>
+            <div class="widget-icons pull-right" style="margin-top: -20px">
+                <button type="submit" class="btn  btn-large btn-info" data-bind="click: startCreate" data-default-focus>Добавить</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="widget-content">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Имя 1</th>
+                    <th>Cвязь</th>
+                    <th>Имя 2</th>
+                </tr>
+                <tbody id="items_list" data-bind="template: { name: 'contrib-item-row-template', foreach: list}">
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/html" id="contrib-item-row-template">
+    <tr data-bind="click: startUpdate">
+        <td>
+            <span data-bind="text: name_1"></span>
+        </td>
+        <td data-bind="foreach: relations">
+            <span class="badge badge-info" data-bind="text: val"></span>
+        </td>
+        <td>
+            <span data-bind="text: name_2"></span>
+        </td>
+    </tr>
+</script>
+
+<div class="modal hide fade" data-form-type='update' data-form-resource='contrib'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Набор данных</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputName">Имя</label>
+
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name"
+                         style="display: none;"></div>
+                    <input type="text" id="inputName" data-bind="value: name">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
+    </div>
+</div>
+
+<div data-partial-view='app/views/contrib/_editForm.html' data-partial-view-bag="{type: 'create'}">
+</div>
+<div data-partial-view='app/views/contrib/_editForm.html' data-partial-view-bag="{type: 'update'}">
+</div>
+

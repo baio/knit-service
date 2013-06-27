@@ -1,0 +1,141 @@
+.tooltip-inner {
+    white-space:pre-wrap;
+}
+
+body {
+    padding-top: 40px;
+    padding-left: 0px;
+}
+
+.graph-container {
+    position: relative;
+    background: #222;
+    height: 1200px;
+    width: 2500px;
+}
+
+.graph-container.light {
+    background: white;
+}
+
+.link {
+    /*
+    stroke: #999;
+    stroke-opacity: .8;
+    cursor: help;
+    stroke: #999;
+    */
+    stroke-opacity: .8;
+    cursor: help;
+}
+
+
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+    /*
+    stroke: #999;
+    stroke-width: 1.5px;
+    fill: #222;
+    */
+}
+
+.text {
+    fill: lightgreen;
+    font-size: 10px;
+    visibility: visible;
+}
+
+.text.light{
+    fill: black;
+}
+
+.text.big{
+    font-size: 15px;
+}
+
+.text.hidden{
+    visibility: none;
+}
+
+
+.graph-toolbox
+{
+    z-index: 1;
+    /*margin-left: 20px;*/
+    /*margin-top: 20px;*/
+    /*background-color: white;*/
+    /*
+    background-color: rgb(102, 102, 102);
+    color: white;
+    padding: 20px;
+    */
+}
+
+.graph-toolbox-dock
+{
+    z-index: 1;
+    margin-left: 20px;
+    margin-top: 20px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,.065);
+}
+
+.mainbar {
+    margin-left: 0px;
+}
+
+tr.row-input > td > input{
+    margin-bottom: 0px;
+}
+
+.error-message-inline
+{
+    color: #b94a48;
+    display: block !important;
+}
+/*
+h5 a
+{
+    color: forestgreen;
+}
+*/
+body{
+    background-color: #ffffff;
+}
+
+.ui-autocomplete
+{
+  z-index: 1051;
+}
+
+.tagit {
+    width: 432px;
+    border-color: rgb(204, 204, 204);
+}
+
+.tagit[disabled] {
+    cursor: not-allowed;
+    background: #eeeeee;
+}
+
+.modal-header.wiolet
+{
+    color: white!important;
+    background-color: #932ab6;
+}
+
+.modal-header.green
+{
+    background-color: rgb(67, 200, 60);
+}
+
+.modal-header.blue
+{
+    background-color: #52b9e9;
+}
+

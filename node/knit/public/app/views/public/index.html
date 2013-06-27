@@ -1,0 +1,33 @@
+<div>
+
+    <div class="widget wviolet">
+
+        <div class="widget-head">
+            <div class="pull-left">Наборы данных пользователей</div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="widget-content">
+
+            <table class="table" id="_body">
+                <tbody data-bind="foreach: $data">
+                <tr>
+                    <td>
+                        <div>
+                            <a href="#/public/item" data-bind="link: ref"><span data-bind="text: name"></span>&nbsp;
+                                <small data-bind="displaydate: date"></small>
+                            </a>
+                        </div>
+                        <div>
+                            <small>
+                                Описание набора данных здесь
+                            </small>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

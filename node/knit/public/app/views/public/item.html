@@ -1,0 +1,45 @@
+<div>
+
+    <div class="widget wviolet" id="_body">
+
+        <div class="widget-head" data-bind="with: contrib">
+            <div class="pull-left">
+                <a href="#" data-bind="text: name" style="color: mediumturquoise">
+                </a>&nbsp;//&nbsp;<span style="font-size: 12px" data-bind="displaydate: date"></span></div>
+            <div class="clearfix"></div>
+            <div class="pull-left" style="font-size: 12px">Описание набора данных здесь</div>
+            <div class="widget-icons pull-right" style="margin-top: -20px">
+                <a type="submit" href="#" data-bind="click: copy" style="font-size: 12px;">копировать к себе</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="widget-content">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Имя 1</th>
+                    <th>Связь</th>
+                    <th>Имя 2</th>
+                </tr>
+                </thead>
+                <tbody data-bind="template: { name: 'contrib-item-row-template', foreach: list}">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/html" id="contrib-item-row-template">
+        <tr>
+            <td>
+                <span data-bind="text: name_1"></span>
+            </td>
+            <td data-bind="foreach: relations">
+                <span class="badge badge-info" data-bind="text: val"></span>
+            </td>
+            <td>
+                <span data-bind="text: name_2"></span>
+            </td>
+        </tr>
+    </script>
+
+</div>

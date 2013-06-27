@@ -1,0 +1,35 @@
+{
+    "settings": {
+        "analysis": {
+            "filter": {
+                "name_ngrams": {
+                    "side": "front",
+                    "max_gram": 20,
+                    "min_gram": 2,
+                    "type": "edgeNGram"
+                }
+            },
+            "analyzer": {
+                "full_name": {
+                    "filter": [
+                        "standard",
+                        "lowercase",
+                        "asciifolding"
+                    ],
+                    "type": "custom",
+                    "tokenizer": "standard"
+                },
+                "partial_name": {
+                    "filter": [
+                        "standard",
+                        "lowercase",
+                        "asciifolding",
+                        "name_ngrams"
+                    ],
+                    "type": "custom",
+                    "tokenizer": "standard"
+                }
+            }
+        }
+    }
+}

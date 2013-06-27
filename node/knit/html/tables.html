@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <!-- Title and other stuffs -->
+    <title>Tables - Metro King</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+
+    <!-- Stylesheets -->
+    <link href="style/bootstrap.css" rel="stylesheet">
+    <!-- Font awesome icon -->
+    <link rel="stylesheet" href="style/font-awesome.css">
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="style/jquery-ui.css">
+    <!-- Calendar -->
+    <link rel="stylesheet" href="style/fullcalendar.css">
+    <!-- prettyPhoto -->
+    <link rel="stylesheet" href="style/prettyPhoto.css">
+    <!-- Star rating -->
+    <link rel="stylesheet" href="style/rateit.css">
+    <!-- Date picker -->
+    <link rel="stylesheet" href="style/bootstrap-datetimepicker.min.css">
+    <!-- jQuery Gritter -->
+    <link rel="stylesheet" href="style/jquery.gritter.css">
+    <!-- CLEditor -->
+    <link rel="stylesheet" href="style/jquery.cleditor.css">
+    <!-- Bootstrap toggle -->
+    <link rel="stylesheet" href="style/bootstrap-toggle-buttons.css">
+    <!-- Main stylesheet -->
+    <link href="style/style.css" rel="stylesheet">
+    <!-- Widgets stylesheet -->
+    <link href="style/widgets.css" rel="stylesheet">
+    <!-- Responsive style (from Bootstrap) -->
+    <link href="style/bootstrap-responsive.css" rel="stylesheet">
+
+    <link href="style/site.css" rel="stylesheet">
+
+    <!-- HTML5 Support for IE -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shim.js"></script>
+    <![endif]-->
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="img/favicon/favicon.png">
+</head>
+
+<body>
+
+<!--
+<div class="navbar navbar-fixed-top navbar-inverse">
+    <div class="navbar-inner">
+        <div class="container">
+            <!-- Menu button for smallar screens -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <!-- Site name for smallar screens -->
+            <a href="index.html" class="brand"><span class="bold">Knit</span></a>
+
+            <!-- Navigation starts -->
+            <div class="nav-collapse collapse">
+
+
+                <!-- Links -->
+                <ul class="nav pull-right">
+                    <li class="dropdown pull-right">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img src="https://si0.twimg.com/profile_images/1121489002/bender_aplauso_normal.jpg" alt=""
+                                 class="nav-user-pic"/> Привет, Max Putilov <b class="caret"></b>
+                        </a>
+
+                        <!-- Dropdown menu -->
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><i class="icon-briefcase"></i>Ваши данные</a></li>
+                            <li><a href="#"><i class="icon-globe"></i>Данные пользователей</a></li>
+                            <li class="divider"></li>
+                            <li><a href="login.html"><i class="icon-off"></i> Выйти</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <!-- Notifications -->
+                <ul class="nav pull-right">
+
+                    <!-- Message button with number of latest messages count-->
+                    <li class="dropdown dropdown-big">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="icon-thumbs-up"></i> Популярные
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <!-- Heading - h5 -->
+                                <h5><i class="icon-globe"></i> Ваши графы</h5>
+                                <!-- Use hr tag to add border -->
+                                <hr/>
+                            </li>
+                            <li>
+                                <!-- List item heading h6 -->
+                                <a href="#">Граф А</a>
+                                <!-- List item para -->
+                                <p>Здесь описание графа А...</p>
+                                <hr/>
+                            </li>
+                            <li>
+                                <a href="#">Граф Б</a>
+
+                                <p>Здесь описание графа Б...</p>
+                                <hr/>
+                            </li>
+                            <li>
+                                <div class="drop-foot">
+                                    <a href="#">Смотреть все</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider-vertical"></li>
+
+                    <!-- Members button with number of latest members count -->
+                    <li class="dropdown dropdown-big">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="icon-briefcase"></i> Ваши <span class="badge badge-success">6</span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <!-- Heading - h5 -->
+                                <h5><i class="icon-briefcase"></i> Ваши графы</h5>
+                                <!-- Use hr tag to add border -->
+                                <hr/>
+                            </li>
+                            <li>
+                                <!-- List item heading h6-->
+                                <a href="#">Граф А</a>
+
+                                <p>Здесь описание графа А...</p>
+                                <hr/>
+                            </li>
+                            <li>
+                                <a href="#">Граф Б</a>
+
+                                <p>Здесь описание графа Б...</p>
+                                <hr/>
+                            </li>
+                            <li>
+                                <a href="#">Граф В</a>
+
+                                <p>Здесь описание графа В...</p>
+                                <hr/>
+                            </li>
+                            <li>
+                                <div class="drop-foot">
+                                    <a href="#">Смотреть все</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider-vertical"></li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Main content starts -->
+
+<div class="content">
+
+
+    <div class="mainbar">
+        <!--
+                <div class="page-head">
+
+                    <h2 class="pull-left">Edit contribution.
+                        <span class="page-meta">Click by header to modify contribution name, link or description.
+                            Enter data in top row to add new item. Click by item to edit data.
+                            Data automatically saved every 30 seconds. Hotkeys: CTL+A add new row, CTL+S save changes.
+                            New row could be added only if there is no validation errors in the row.
+                        </span>
+                    </h2>
+
+                    <div class="bread-crumb pull-right">
+                        <a href="index.html"><i class="icon-home"></i> Home</a>
+                        <span class="divider">/</span>
+                        <a href="#" class="bread-current">Contribs</a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+
+                </div>
+        -->
+
+
+        <!-- Matter -->
+
+        <div class="matter">
+            <div class="container-fluid">
+
+                <div class="row-fluid">
+
+                    <div class="span12">
+
+                        <div class="widget wviolet">
+
+                            <div class="widget-head">
+                                <div class="pull-left">gov-ru&nbsp;//<span style="font-size: 12px"> 21 марта 2013</span></div>
+                                <div class="clearfix"></div>
+                                <div class="pull-left" style="font-size: 12px">Описание набора данных здесь</div>
+                                <div class="widget-icons pull-right" style="margin-top: -20px">
+                                    <button type="submit" class="btn  btn-large btn-info">Сохранить</button>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="widget-content">
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Имя 1</th>
+                                        <th>Имя 2</th>
+                                        <th>Семейные<br/>связи</th>
+                                        <th>Частные<br/>связи</th>
+                                        <th>Проф.<br/>связи</th>
+                                        <th style="width: 2%"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td><input type="text" class="input-large" style="margin-bottom: 0px"/></td>
+                                        <td><input type="text" class="input-large" style="margin-bottom: 0px"/></td>
+                                        <td><input type="text" class="input-small" style="margin-bottom: 0px"/></td>
+                                        <td><input type="text" class="input-small" style="margin-bottom: 0px"/></td>
+                                        <td><input type="text" class="input-small" style="margin-bottom: 0px"/></td>
+                                        <td><button class="btn btn-mini btn-warning"><i class="icon-warning-sign"></i></button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Иван Иванов</td>
+                                        <td>Мария Иванова</td>
+                                        <td><span class="label label-info">муж</span></td>
+                                        <td><span class="label label-info">друг</span></td>
+                                        <td><span class="label label-info">сотрудник</span></td>
+                                        <td><button class="btn btn-mini btn-danger"><i class="icon-remove"></i></button></td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>Иван Иванов</td>
+                                        <td>Мария Иванова</td>
+                                        <td><span class="label label-info">муж</span></td>
+                                        <td><span class="label label-info">друг</span></td>
+                                        <td><span class="label label-info">сотрудник</span></td>
+                                        <td><button class="btn btn-mini btn-danger"><i class="icon-remove"></i></button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Иван Иванов</td>
+                                        <td>Мария Иванова</td>
+                                        <td><span class="label label-info">муж</span></td>
+                                        <td><span class="label label-info">друг</span></td>
+                                        <td><span class="label label-info">сотрудник</span></td>
+                                        <td><button class="btn btn-mini btn-danger"><i class="icon-remove"></i></button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Иван Иванов</td>
+                                        <td>Мария Иванова</td>
+                                        <td><span class="label label-info">муж</span></td>
+                                        <td><span class="label label-info">друг</span></td>
+                                        <td><span class="label label-info">сотрудник</span></td>
+                                        <td><button class="btn btn-mini btn-danger"><i class="icon-remove"></i></button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Иван Иванов</td>
+                                        <td>Мария Иванова</td>
+                                        <td><span class="label label-info">муж</span></td>
+                                        <td><span class="label label-info">друг</span></td>
+                                        <td><span class="label label-info">сотрудник</span></td>
+                                        <td><button class="btn btn-mini btn-danger"><i class="icon-remove"></i></button></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+
+                            <!--
+                            <div class="widget-foot">
+
+                                <div class="pagination pull-right">
+                                    <ul>
+                                        <li><a href="#">Prev</a></li>
+                                        <li><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">4</a></li>
+                                        <li><a href="#">Next</a></li>
+                                    </ul>
+                                </div>
+                                <div class="clearfix"></div>
+
+                            </div>
+                            -->
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- Matter ends -->
+
+    </div>
+
+    <!-- Mainbar ends -->
+    <div class="clearfix"></div>
+
+</div>
+<!-- Content ends -->
+
+<!-- Scroll to top -->
+<span class="totop"><a href="#"><i class="icon-chevron-up"></i></a></span>
+
+<!-- JS -->
+<script src="js/jquery.js"></script>
+<!-- jQuery -->
+<script src="js/bootstrap.js"></script>
+<!-- Bootstrap -->
+<script src="js/jquery-ui-1.10.2.custom.min.js"></script>
+<!-- jQuery UI -->
+<script src="js/fullcalendar.min.js"></script>
+<!-- Full Google Calendar - Calendar -->
+<script src="js/jquery.rateit.min.js"></script>
+<!-- RateIt - Star rating -->
+<script src="js/jquery.prettyPhoto.js"></script>
+<!-- prettyPhoto -->
+
+<!-- jQuery Flot -->
+<script src="js/excanvas.min.js"></script>
+<script src="js/jquery.flot.js"></script>
+<script src="js/jquery.flot.resize.js"></script>
+<script src="js/jquery.flot.pie.js"></script>
+<script src="js/jquery.flot.stack.js"></script>
+
+<script src="js/jquery.gritter.min.js"></script>
+<!-- jQuery Gritter -->
+<script src="js/sparklines.js"></script>
+<!-- Sparklines -->
+<script src="js/jquery.cleditor.min.js"></script>
+<!-- CLEditor -->
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+<!-- Date picker -->
+<script src="js/jquery.toggle.buttons.js"></script>
+<!-- Bootstrap Toggle -->
+<script src="js/filter.js"></script>
+<!-- Filter for support page -->
+<!--<script src="js/custom.js"></script>--> <!-- Custom codes -->
+<script src="js/charts.js"></script>
+<!-- Custom chart codes -->
+
+</body>
+</html>

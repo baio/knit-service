@@ -1,0 +1,163 @@
+<div>
+
+    <div class="widget wviolet" id="_body">
+
+        <div class="widget-head">
+            <div class="pull-left" data-bind="with: contrib"><a href="#" data-bind="text: name, click: startUpdate" style="color: mediumturquoise"></a>&nbsp;//<span style="font-size: 12px"> 21 марта 2013</span></div>
+            <div class="clearfix"></div>
+            <div class="pull-left" style="font-size: 12px">Описание набора данных здесь</div>
+            <div class="widget-icons pull-right" style="margin-top: -20px">
+                <button type="submit" class="btn  btn-large btn-info" data-bind="click: save, visible : _isModifyed">Сохранить</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="widget-content">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Имя 1</th>
+                    <th>Имя 2</th>
+                    <th>Семейные<br/>связи</th>
+                    <th>Частные<br/>связи</th>
+                    <th>Проф.<br/>связи</th>
+                    <th style="width: 2%"></th>
+                </tr>
+                <tr data-bind="template: {name: 'contrib-append-item-template', data: editItem}" class="row-input" id="append_row"></tr>
+                </thead>
+                <tbody id="items_list" data-bind="template: { name: 'contrib-item-row-template', foreach: list}">
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/html" id="contrib-item-row-template">
+    <tr data-bind="visible: !_isRemoved(), template: {name: displayMode, data: $data}, click: edit" class="row-input">
+    </tr>
+</script>
+
+<script type="text/html" id="contrib-append-item-template">
+    <td>
+        <input type="text" class="input-large mousetrap" data-bind="autocompleteWithScheme: name_1, autocompleteOpts : {url: '/names'}"
+               id="append_item_focus" />
+    </td>
+    <td>
+        <input type="text" class="input-large mousetrap" data-bind="autocompleteWithScheme: name_2, autocompleteOpts : {url: '/names'}"/>
+    </td>
+    <td>
+        <input type="text" class="input-small mousetrap"
+               data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}" />
+    </td>
+    <td>
+        <input type="text" class="input-small mousetrap"
+               data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}" />
+    </td>
+    <td>
+        <input type="text" class="input-small mousetrap"
+               data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"
+               id="append_item_trigger" />
+    </td>
+    <td>
+        <div data-bind="ifnot: isValid()">
+            <a href="#" data-bind="tooltip : errors">
+                <button class="btn btn-mini btn-warning"><i class="icon-warning-sign"></i></button>
+            </a>
+            <!--<p data-bind="text: errors().length"></p>-->
+        </div>
+    </td>
+</script>
+
+<script type="text/html" id="contrib-edit-item-template">
+    <td>
+        <input type="text" class="input-large edit-item-focus mousetrap" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"
+               data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <input type="text" class="input-large mousetrap" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"
+               data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <input type="text" class="input-small mousetrap"
+               data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}" data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <input type="text" class="input-small mousetrap"
+               data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}" data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <input type="text" class="input-small edit-item-trigger mousetrap"
+               data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"
+               data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <div data-bind="ifnot: isValid()">
+            <a href="#" data-bind="tooltip : errors">
+                <button class="btn btn-mini btn-warning"><i class="icon-warning-sign"></i></button>
+            </a>
+            <!--<p data-bind="text: errors().length"></p>-->
+        </div>
+    </td>
+</script>
+
+<script type="text/html" id="contrib-item-template">
+    <td>
+        <span data-bind="text: name_1"></span>
+    </td>
+    <td>
+        <span data-bind="text: name_2"></span>
+    </td>
+    <td>
+        <span class="label label-info" data-bind="text: family_rel"></span>
+    </td>
+    <td>
+        <span class="label label-info" data-bind="text: private_rel"></span>
+    </td>
+    <td>
+        <span class="label label-info" data-bind="text: prof_rel"></span>
+    </td>
+    <td>
+        <!--
+        <div data-bind="ifnot: isValid()">
+            <a href="#" data-bind="tooltip : errors"><i class="icon-warning-sign"></i></a>
+            <p data-bind="text: errors().length"></p>
+        </div>
+        -->
+        <button class="btn btn-mini btn-danger" data-bind="click: remove" data-bind-event="button-remove"><i class="icon-remove" data-bind-event="button-remove"></i></button>
+    </td>
+</script>
+
+<div class="modal hide fade" data-form-type='update' data-form-resource='contrib'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Набор данных</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputName">Имя</label>
+
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name" style="display: none;"></div>
+                    <input type="text" id="inputName" data-bind="value: name">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputUrl">Ссылка</label>
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: url" style="display: none;"></div>
+                    <input type="text" id="inputUrl" data-bind="value: url">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
+    </div>
+</div>
+

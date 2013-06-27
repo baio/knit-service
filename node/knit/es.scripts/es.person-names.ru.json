@@ -1,0 +1,48 @@
+{
+    "settings": {
+        "analysis": {
+            "filter": {
+                "val_ngram": {
+                    "max_gram": 20,
+                    "min_gram": 2,
+                    "type": "edge_ngram"
+                }
+            },
+            "analyzer": {
+                "val_index": {
+                    "filter": [
+                        "lowercase",
+                        "val_ngram"
+                    ],
+                    "tokenizer": "keyword"
+                },
+                "val_search": {
+                    "filter": [
+                        "lowercase"
+                    ],
+                    "tokenizer": "keyword"
+                }
+            }
+        }
+    },
+    "mappings": {
+        "politic-rus": {
+            "properties": {
+                "val": {
+                    "fields": {
+                        "autocomplete": {
+                            "search_analyzer": "val_search",
+                            "index_analyzer": "val_index",
+                            "type": "string"
+                        },
+                        "val": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        }
+                    },
+                    "type": "multi_field"
+                }
+            }
+        }
+    }
+}

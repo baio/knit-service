@@ -1,0 +1,12 @@
+{
+    "names": {
+        "properties": {
+            "val": {
+                    "val": {
+                        "type": "string",
+                        "analyzer": "partial_name"
+                    }
+            }
+        }
+    }
+}

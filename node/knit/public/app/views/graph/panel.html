@@ -1,0 +1,95 @@
+<div style="margin-left: -20px; margin-top: -12px">
+    <div class="affix graph-toolbox-dock" id="_toolbox">
+        <!-- ko if : name_src() && isShown() -->
+        <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: hide"><i class="icon-remove"></i></button>
+            <li><a href="#" data-bind="attr : {href : url_src}, text : name_src" target="_blank"></a></li>
+            <li><a href="#" data-bind="attr : {href : url_tgt}, text : name_tgt" target="_blank"></a></li>
+            <li class="divider"></li>
+            <!-- ko foreach : tags -->
+            <li style="text-align: center; margin-top: 10px;">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" target="_blank" id="drop_links" data-bind="click : $parent.linksShown">
+                        <span data-bind="text : name" ></span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop_links" data-bind="foreach: urls">
+                        <li>
+                            <a href="#" data-bind="attr: {href: href}, text: title" target="_blank"></a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <!-- /ko -->
+        </ul>
+        <!-- /ko -->
+    </div>
+    <div id="_panelToolbox">
+        <div class="affix graph-toolbox" data-bind="visible: isShown">
+            <ul class="dropdown-menu" style="display: block; padding: 10px 10px; width: 250px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: hide"><i class="icon-remove"></i></button>
+                <li>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#_panel_toolbox_filter" data-bind="click: switchActive">Поиск</a></li>
+                        <li><a href="#_panel_toolbox_props" data-bind="click: switchActive">Свойства</a></li>
+                    </ul>
+                </li>
+                <span class="tab-content">
+                    <span class="tab-pane active" id="_panel_toolbox_filter">
+                        <li>
+                            <input placeholder="поиск на графе" class="input search-query" style="margin-bottom: 5px;"
+                                   data-bind="value : findNode, valueUpdate:'afterkeydown'">
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <input placeholder="узел А" class="input search-query" style="margin-bottom: 5px;"
+                                   data-bind="autocomplete : from, autocompleteOpts : {url : '/index',  filterParams : { index : 'person-names.ru', type : 'politic-rus' } }">
+                        </li>
+                        <li>
+                            <input placeholder="узел Б" class="input search-query" style="margin-bottom: 5px;"
+                                   data-bind="autocomplete : to, autocompleteOpts : {url : '/index',  filterParams : { index : 'person-names.ru', type : 'politic-rus' } }">
+                        </li>
+                        <li>
+                            <div style="margin-bottom: 5px;">
+                                <input class="input" type="checkbox"
+                                       data-bind="checked : isManyPaths"> Искать все
+                             </div>
+                        </li>
+
+                        <li>
+                            <a href="#" class="btn btn-small btn-info" data-bind="click: find">поиск</a>
+                        </li>
+                    </span>
+                    <span class="tab-pane" id="_panel_toolbox_props">
+                        <li>
+                            <h6>Цветовая схема</h6>
+                            <select data-bind="options: colorSchemesList, optionsText: 'val', optionsValue: 'key', value: colorScheme"></select>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <h6>Метки</h6>
+                            <select data-bind="options: fontsList, optionsText: 'val', optionsValue: 'key', value: font"></select>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <h6>Расположение</h6>
+                            <select data-bind="options: layoutsList, optionsText: 'val', optionsValue: 'key', value: layout"></select>
+                            <span data-bind="visible: layout() == 1">
+                                <a href="#" style="color: blue; padding: 0px;" data-bind="click: reset">сбросить</a> &nbsp; &nbsp; &nbsp;
+                                <!--<a href="#" style="color: blue; padding: 0px;">сохранить</a>-->
+                            </span>
+                        </li>
+                    </span>
+
+                </span>
+            </ul>
+        </div>
+        <div class="affix graph-toolbox" data-bind="visible: !isShown()">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: show">
+                <i class="icon-chevron-right" id="show_toolbox_panel_button" style="color: white;"></i></button>
+        </div>
+    </div>
+    <div class="graph-container" id="_body">
+        <div id="graph" style="width: 2500px; height: 1200px;"></div>
+    </div>
+</div>

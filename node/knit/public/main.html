@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Knit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/jquery.tagit.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+    <link href="assets/css/toastr.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/widgets.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/site.css" rel="stylesheet">
+
+
+    <script src="assets/js/jquery-2.0.0.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/async.js"></script>
+    <script src="assets/js/knockout-2.2.1.js"></script>
+    <script src="assets/js/knockout.mapping-latest.js"></script>
+    <script src="assets/js/knockout.validation.js"></script>
+    <script src="assets/js/signals.min.js"></script>
+    <script src="assets/js/crossroads.min.js"></script>
+    <script src="assets/js/amplify.min.js"></script>
+    <script src="assets/js/toastr.min.js"></script>
+    <script src="assets/js/jsrender.js"></script>
+    <script src="assets/js/mousetrap.min.js"></script>
+    <script src="assets/js/mousetrap-global-bind.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/jstorage.min.js"></script>
+    <script src="assets/js/tag-it.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.watch-2.0.js"></script>
+    <script type="text/javascript" src="assets/js/d3.v2.js"></script>
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div id="layout_loading">
+    <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner">
+            <div class="container" style="margin-left: 20px">
+                <a href="#" class="brand"><span class="bold">Knit</span></a>
+            </div>
+        </div>
+    </div>
+    <div style="margin: 20px;">
+        <span style="color: #000000">Loading...</span>
+        <!--
+        <div style="color: #808080; font-size: 10px">
+            <p id="loading_quote_1" style="display: none" class="loading_quote">
+                If madame my wife undertook to keep the register in her memory alone, she would not lose a word of
+                it--not a
+                syllable of it. Knitted, in her own stitches and her own symbols, it will always be as plain to her as
+                the
+                sun.
+            </p>
+            <p id="loading_quote_2" style="display: none" class="loading_quote">
+                A wonderful fact to reflect upon, that every human creature is constituted to be that profound secret
+                and mystery to every other. A solemn consideration, when I enter a great city by night, that every one
+                of those darkly clustered houses encloses its own secret; that every room in every one of them encloses
+                its own secret; that every beating heart in the hundreds of thousands of breasts there, is, in some of
+                its imaginings, a secret to the heart nearest it!
+            </p>
+            <p id="loading_quote_3" style="display: none" class="loading_quote">
+                It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of
+                foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it
+                was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything
+                before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the
+                other way.
+            </p>
+            <p id="loading_quote_4" style="display: none" class="loading_quote">
+                No crowd was about the door; no people were discernible at any of the many windows; not even a chance
+                passerby was in the street. An unnatural silence and desertion reigned there. Only one soul was to be
+                seen, and that was Madame Defarge--who leaned against the door-post, knitting, and saw nothing
+            </p>
+            <p id="loading_quote_5" style="display: none" class="loading_quote">
+                Vengeance and retribution require a long time; it is the rule.
+            </p>
+        </div>
+        -->
+    </div>
+</div>
+<div id="layout_content" style="display: none">
+    <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner" id="_nav">
+            <div class="container">
+                <!-- Menu button for smallar screens -->
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <!-- Site name for smallar screens -->
+                <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph">
+                    <span class="bold">Knit</span>
+                </a>
+                <!--<a href="#/graph" class="brand" data-bind="link: {}">-->
+                <a href="/" class="brand">
+                    <span class="bold">Knit</span>
+                </a>
+                <ul class="nav pull-left" data-bind="visible: active() === '/graph/panel'">
+                    <li class="dropdown dropdown-big" data-bind="with: activeGraph">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#" data-bind="text: name">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <h5>Создан <span>1 марта 2012</span></h5>
+
+                                <p>Здесь описание графа ...</p>
+                            </li>
+                            <li data-bind="visible : isYours">
+                                <hr/>
+                                <a href="#/graph/data" data-bind="link : id"><i class="icon-th-large"></i>Данные
+                                    графа</a>
+                                <hr/>
+                            </li>
+                            <li data-bind="visible : isYours">
+                                <a href="#" data-bind="click: save"><i class="icon-hdd"></i>Сохранить расположение</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="nav-collapse collapse" data-bind="with: user">
+
+                    <ul class="nav pull-right">
+                        <li data-bind="ifnot: name">
+                            <a href="/auth/twitter"><i class="icon-home"></i>Вход</a>
+                        </li>
+                        <li class="dropdown pull-right" data-bind="if: name">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <img src="" alt="" data-bind="attr : { src : img } " class="nav-user-pic"/> Привет,
+                                <span data-bind="text: name"></span> <b class="caret"></b>
+                            </a>
+
+                            <!-- Dropdown menu -->
+                            <ul class="dropdown-menu">
+                                <li><a href="#/contrib/start" data-bind="link: {}"><i class="icon-briefcase"></i>Ваши
+                                    данные</a></li>
+                                <li><a href="#/public/index" data-bind="link: {}"><i class="icon-globe"></i>Данные
+                                    пользователей</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/auth/logout"><i class="icon-off"></i> Выйти</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                    <ul class="nav pull-right">
+
+                        <!-- Message button with number of latest messages count-->
+                        <li class="dropdown dropdown-big">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="icon-thumbs-up"></i> Популярные
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <!-- Heading - h5 -->
+                                    <h5><i class="icon-globe"></i> Популярные графы</h5>
+                                    <!-- Use hr tag to add border -->
+                                    <hr/>
+                                </li>
+                                <span data-bind="template: {name : 'contrib-menu-item', foreach: popular}" data-view-engine-clean>
+                                </span>
+                                <li>
+                                    <div class="drop-foot">
+                                        <a href="#">Смотреть все</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="divider-vertical"></li>
+
+                        <!-- ko if: name -->
+                        <li class="dropdown dropdown-big">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="icon-briefcase"></i> Ваши <span class="badge badge-success">7</span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <!-- Heading - h5 -->
+                                    <h5><i class="icon-briefcase"></i> Ваши графы</h5>
+                                    <!-- Use hr tag to add border -->
+                                    <hr/>
+                                </li>
+                                <span data-bind="template: {name : 'contrib-menu-item', foreach: graphs}" data-view-engine-clean>
+                                </span>
+                                <li>
+                                    <div class="drop-foot">
+                                        <a href="#">Смотреть все</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="divider-vertical"></li>
+                        <!-- /ko -->
+
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="text/html" id="contrib-menu-item">
+        <li>
+            <a href="#" data-bind="text: name, click: $parent.open"></a>
+
+            <p>Здесь описание графа ...</p>
+            <hr/>
+        </li>
+    </script>
+
+
+    <!-- Main content starts -->
+
+    <div class="content">
+
+
+        <div class="mainbar">
+
+            <!-- Matter -->
+
+            <div class="matter">
+                <div class="container-fluid">
+
+                    <div class="row-fluid">
+
+                        <div class="span12">
+
+                            <div id="_layout">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Matter ends -->
+
+        </div>
+
+
+        <!-- Mainbar ends -->
+        <div class="clearfix"></div>
+
+    </div>
+
+    <div class="footer">
+        <div class="span3">
+            <div><a href="http://www.data-avail.com" target="_blank">data-avail &copy; 2013</a></div>
+            <div><a href="http://www.youtube.com/watch?v=WjOKZO-u6s4" target="_blank">Видео туториал .</a></div>
+            <div><a href="mailto:max.putilov@data-avail.com" target="_blank">Вопросы ?</a></div>
+            <div>version 0.1.0</div>
+        </div>
+        <div class="span9">
+            If madame my wife undertook to keep the register in her memory alone, she would not lose a word of
+            it--not a syllable of it. Knitted, in her own stitches and her own symbols, it will always be as plain to her as
+            the sun.
+
+        </div>
+    </div>
+
+
+    <script data-main="/app/main" src="/assets/js/require.js"></script>
+
+</div>
+
+</body>
+
+</html>
