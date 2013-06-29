@@ -10,5 +10,10 @@
     , "dependencies": {
     "request": "latest",
     "async": "latest"
-}
+},
+    "devDependencies": {
+        "should" : "latest",
+        "mocha" : "latest"
+    }
+
 }
