@@ -1,4 +1,4 @@
-if process.env.CACHE_DISABLED != "true"
+if process.env.REDIS_HOST and process.env.CACHE_DISABLED != "true"
   redis = require "redis"
   client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST)
   client.auth process.env.REDIS_PASSWORD, (err) ->
@@ -7,7 +7,7 @@ if process.env.CACHE_DISABLED != "true"
 _default_graph = "518b989739ed9714289d0bc1"
 
 _checkCacheEnabled = (done) ->
-  if process.env.CACHE_DISABLED == "true"
+  if !process.env.REDIS_HOST or process.env.CACHE_DISABLED == "true"
     if done then done(null, null)
     return false
   else

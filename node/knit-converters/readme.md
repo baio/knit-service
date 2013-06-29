@@ -44,7 +44,20 @@ select ?s, ?given_name, ?sur_name, ?name, ?label, ?foaf_name
                 optional { ?s foaf:name ?foaf_name }
 
 	}
+
+
+  select ?s, ?name, ?label, ?foaf_name
+	where
+	{
+		?s a dbpedia-owl:Organisation;
+                dbpedia-owl:locationCountry dbpedia:Russia.
+                optional { ?s dbpprop:name ?name }
+                optional { ?s rdfs:label ?label }
+                optional { ?s foaf:name ?foaf_name }
+	}
+
 ```
+
 
   Sparql queries often have missing info, when queries executed for batch of resources.
   For example when we rquest info for this particular resource result includes names and labels (for batch request not)

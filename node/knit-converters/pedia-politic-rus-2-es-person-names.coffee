@@ -1,11 +1,10 @@
 fs = require "fs"
 req = require "request"
 es = require "../es/es"
+async = require "async"
 
 _SPARQL_URI = "http://dbpedia.org/sparql"
-_ES_URI = "http://188.244.44.9:9201"
-_RQ_TEMPLATE = "dbpedia_request_template.txt"
-
+_RQ_TEMPLATE = "dbpedia_people_request_template.txt"
 
 #convert json triplestore to dom structure
 jsonSparql2struct = (j) ->
@@ -63,60 +62,42 @@ jsonSparql2struct = (j) ->
           else
             item.ru_name = "#{spt[1]} #{spt[0]}"
 
-  return res
+  data = []
+  for doc in res
+    obj = {_id : doc.en_name, _type: "politic-rus", val: doc.en_name, lang: "en", uri: doc.id}
+    data.push obj
+    if doc.ru_name
+      obj = {_id : doc.ru_name, _type: "politic-rus", val: doc.ru_name, lang: "ru", uri: doc.id}
+      data.push obj
 
-#convert dom structure to elactic search bulk update data
-struct2es = (struct) ->
+  return data
 
-  data = ""
+pedia2es = (uri, index, sparqlData, done) ->
+  data = jsonSparql2struct sparqlData
+  opts = uri: uri, index: index, settingsPath: "./names_index.json"
+  es.createIndex opts, (err) ->
+    if !err or err.status == 400
+      es.bulk uri, index, data, done
+    else
+      done err
 
-  for i in struct
+##########################################
 
-    data += JSON.stringify { "create" : { "_index" : "person-names", "_type" : "politic-rus", "_id" : i.en_name } }
-    data += "\r\n"
-    data += JSON.stringify { "val": i.en_name, "lang": "en", "uri": i.id  }
-    data += "\r\n"
-
-    if i.ru_name
-      data += JSON.stringify { "create" : { "_index" : "person-names", "_type" : "politic-rus", "_id" : i.ru_name } }
-      data += "\r\n"
-      data += JSON.stringify { "val": i.ru_name, "lang": "ru", "uri": i.id  }
-      data += "\r\n"
-
-  data
-
-
-###
-j = JSON.parse fs.readFileSync file
-
-  struct = jsonSparql2struct "russian-buisness.json"
-
-data = struct2es struct
-
-console.log data
-
-req {method: "post", uri : "http://188.244.44.9:9201/person-names/_bulk", body: data}, (err, resp, body) ->
-  console.log err
-
-###
-
-pedia2es = (j, esIndex, done) ->
-
-  struct = jsonSparql2struct j
-
-  data = struct2es struct
-
-  req {method: "post", uri : "#{_ES_URI}/#{esIndex}/_bulk", body: data}, (err) ->
-    done err
-
-requestData = ->
+exports.convert = (esUri, done)->
 
   tmpl = fs.readFileSync _RQ_TEMPLATE, "utf-8"
+  params = ["?s a yago:RussianPoliticians",
+            "?s dcterms:subject category:Russian_politicians",
+            "?s dcterms:subject category:Russian_businesspeople"]
 
-  query = tmpl
-    .replace("{0}", "")
-    .replace("{1}", "")
-    .replace("{2}", "?s a yago:RussianPoliticians")
+  async.map params, ((prm, ck) ->
+    query = tmpl.replace("{0}", "").replace("{1}", "").replace("{2}", prm)
+    _createNames(esUri, query, ck)),
+    done
+
+_createNames = (esUri, query, done) ->
+
+  console.log query
 
   data =
     "default-graph-uri" : "http://dbpedia.org",
@@ -126,22 +107,6 @@ requestData = ->
 
   req.get uri: _SPARQL_URI, qs: data, (err, data) ->
     if !err
-      pedia2es JSON.parse(data.body), "person-names", (err) ->
-        console.log err
+      pedia2es esUri, "person-names", JSON.parse(data.body), done
     else
-      console.log err
-
-
-copyFromOldVersion = ->
-  es.copy _ES_URI, "org-names.ru", "org-names", 1000
-    ,(m) ->
-      _id: m._id
-      _type: m._type
-      val: m._id
-      lang: "ru"
-      uri: m._id
-    ,(err) ->
-      console.log err
-
-
-copyFromOldVersion()
+      done err

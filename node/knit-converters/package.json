@@ -1,0 +1,14 @@
+{ "name": "baio-es"
+    , "description": "knit converters"
+    , "version": "0.0.1"
+    , "author": "Max Putilov <max.putilov@gmail.com>"
+    ,"keywords": [
+    "knit"
+]
+    , "engines": ["node >= 0.4.0"]
+    , "main": "./main.js"
+    , "dependencies": {
+    "request": "latest",
+    "async": "latest"
+}
+}

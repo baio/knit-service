@@ -43,9 +43,9 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
         res ?= {}
         res
       @_availableSchemes = ko.observableArray(
-        [{id: "person-person.ru", label: "Персона - Персона"},
-        {id: "person-org.ru", label: "Персона - Организация"},
-        {id: "org-org.ru", label: "Организация - Организация"}])
+        [{id: "person-person", label: "Персона - Персона"},
+        {id: "person-org", label: "Персона - Организация"},
+        {id: "org-org", label: "Организация - Организация"}])
       @scheme.subscribe (val) =>
         if val
           @_readOnly false
@@ -57,9 +57,9 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
       @_isCreateNext = ko.observable(true)
       @headerCss = ko.computed =>
         switch @scheme()
-          when "person-person.ru" then "blue"
-          when "person-org.ru" then "green"
-          when "org-org.ru" then "wiolet"
+          when "person-person" then "blue"
+          when "person-org" then "green"
+          when "org-org" then "wiolet"
 
     onCreate: (done) ->
       data =

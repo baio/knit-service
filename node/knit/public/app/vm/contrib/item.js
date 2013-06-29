@@ -70,13 +70,13 @@
         });
         this._availableSchemes = ko.observableArray([
           {
-            id: "person-person.ru",
+            id: "person-person",
             label: "Персона - Персона"
           }, {
-            id: "person-org.ru",
+            id: "person-org",
             label: "Персона - Организация"
           }, {
-            id: "org-org.ru",
+            id: "org-org",
             label: "Организация - Организация"
           }
         ]);
@@ -94,11 +94,11 @@
         this._isCreateNext = ko.observable(true);
         this.headerCss = ko.computed(function() {
           switch (_this.scheme()) {
-            case "person-person.ru":
+            case "person-person":
               return "blue";
-            case "person-org.ru":
+            case "person-org":
               return "green";
-            case "org-org.ru":
+            case "org-org":
               return "wiolet";
           }
         });

@@ -2,7 +2,7 @@
 (function() {
   var client, del, get, getJSON, redis, set, setJSON, _checkCacheEnabled, _default_graph, _get_key;
 
-  if (process.env.CACHE_DISABLED !== "true") {
+  if (process.env.REDIS_HOST && process.env.CACHE_DISABLED !== "true") {
     redis = require("redis");
     client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
     client.auth(process.env.REDIS_PASSWORD, function(err) {
@@ -13,7 +13,7 @@
   _default_graph = "518b989739ed9714289d0bc1";
 
   _checkCacheEnabled = function(done) {
-    if (process.env.CACHE_DISABLED === "true") {
+    if (!process.env.REDIS_HOST || process.env.CACHE_DISABLED === "true") {
       if (done) {
         done(null, null);
       }
