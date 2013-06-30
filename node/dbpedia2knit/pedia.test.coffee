@@ -6,6 +6,13 @@ _SPARQL_URI = "http://dbpedia.org/sparql"
 
 getDimonName = ->
   _q_person_name _SPARQL_URI, "http://dbpedia.org/resource/Dmitry_Medvedev", (err, data) ->
+    console.log data
+    should.not.exist err
+    should.exist data
+
+getGazpromName = ->
+  _q_person_name _SPARQL_URI, "http://dbpedia.org/resource/Gazprom", (err, data) ->
+    console.log data
     should.not.exist err
     should.exist data
 
@@ -15,4 +22,5 @@ iter = ->
 
 iter()
 #getDimonName()
+#getGazpromName()
 

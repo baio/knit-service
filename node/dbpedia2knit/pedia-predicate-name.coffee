@@ -10,7 +10,6 @@ name_query = """
 parse = (s, bindings) ->
 
   bindings.map (m) ->
-    id: s
     name :  m.o.value.toLowerCase()
     lang :  m.o["xml:lang"]
 

@@ -9,7 +9,7 @@ people_query = """
              """
 
 parse = (s, bindings) ->
-  bindings.map (b) -> subject: s, predicator: b.p.value, object: b.o.value
+  bindings.map (b) -> subject: s, predicate: b.p.value, object: b.o.value
 
 module.exports = (uri, s, done) ->
   q = people_query.replace("{0}", s)

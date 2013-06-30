@@ -2,11 +2,12 @@ async = require "async"
 _q = require "./pedia-query"
 _q_person_name = require "./pedia-person-name"
 _q_org_name = require "./pedia-org-name"
-_q_predicator_name = require "./pedia-predicator-name"
+_q_predicate_name = require "./pedia-predicate-name"
 _q_children_people = require "./pedia-children-people"
 _q_children_orgs = require "./pedia-children-orgs"
 es = require "../es/es"
 mongo = require "../baio-mongo/mongo"
+mongodb = require "mongodb"
 
 _ES_URI = process.env.ES_URI
 _SPARQL_URI = "http://dbpedia.org/sparql"
@@ -49,52 +50,47 @@ getChildrenPeople = (s, done) ->
 
 _names = []
 
-createPrdeicatorNames = (domain, items) ->
+createPrdeicateNames = (domain, items) ->
 
-  async.map items, ((i, ck) -> _q_predicator_name(_SPARQL_URI, i, ck)), (err, results) ->
+  async.map items, ((i, ck) -> _q_predicate_name(_SPARQL_URI, i, ck)), (err, results) ->
     if !err
       for r in results
         data = r.map (m) ->
-            _id : m.name, _type: domain, val: m.name, lang: m.lang, uri: m.id
-        es.bulk _ES_URI, "predicators", data, ->
+            _id : m.name + ":" + m.lang, _type: domain, val: m.name, lang: m.lang, uri: m.id
+        es.bulk _ES_URI, "predicates", data, ->
 
 createNames = (domain, isPerson, items) ->
 
-  data = []
-  for doc in items
-    if doc
-      obj = {_id : doc.en_name, _type: domain, val: doc.en_name, lang: "en", uri: doc.id}
-      data.push obj
-      if doc.ru_name
-        obj = {_id : doc.ru_name, _type: domain, val: doc.ru_name, lang: "ru", uri: doc.id}
-        data.push obj
+  data = items.map (m) ->
+    _id : m.name + ":" + m.lang, _type: domain, val: m.name, lang: m.lang, uri: m.id
 
   es.bulk _ES_URI, (if isPerson then "person-names" else "org-names"), data, ->
 
-createRels = (domain, predicatorType, rels) ->
+createRels = (domain, predicateType, rels) ->
 
   for r in rels
 
     if r
 
       items = r.map (m) ->
+        _id: new mongodb.ObjectID()
         domain: domain
-        type: predicatorType
+        type: predicateType
         subject: m.subject
         object: m.object
-        predicator: m.predicator
+        predicate: m.predicate
         url: m.subject
 
       if items.length > 0
         name = items[0].subject.match(/^.*\/(.*)$/)[1]
         doc =
-          name : "#{domain} - #{predicatorType} - #{name}"
+          name : "#{domain} - #{predicateType} - #{name}"
           created : new Date()
           descr: "This set was created automatically, from dbpedia"
           url: items[0].subject
           items: items
 
-        createPrdeicatorNames domain, items.map((m) -> m.predicator)
+        createPrdeicateNames domain, items.map((m) -> m.predicate)
 
         mongo.insert "contribs", doc, (err, item) ->
           #console.log err, item
@@ -115,6 +111,7 @@ _iterSubjects = (s, isPerson, done) ->
     peopleRels = results[2]
 
     newPeople = []
+    newOrgs = []
 
     if names
       createNames("wiki", isPerson, names)

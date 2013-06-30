@@ -10,7 +10,7 @@
     return bindings.map(function(b) {
       return {
         subject: s,
-        predicator: b.p.value,
+        predicate: b.p.value,
         object: b.o.value
       };
     });
