@@ -19,7 +19,7 @@ _lower_filter = (item) ->
   item.name = item.name.toLowerCase()
 
 _lang_filter = (item) ->
-  if item.name.match /^[\u0400-\u0450\s]+$/
+  if item.name.match /^[\u0400-\u0450\s\.\(\)]+$/
     item.lang = "ru"
 
 _get_unique = (items) ->

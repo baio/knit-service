@@ -11,7 +11,7 @@
   };
 
   _lang_filter = function(item) {
-    if (item.name.match(/^[\u0400-\u0450\s]+$/)) {
+    if (item.name.match(/^[\u0400-\u0450\s\.\(\)]+$/)) {
       return item.lang = "ru";
     }
   };

@@ -9,6 +9,7 @@
   parse = function(s, bindings) {
     return bindings.map(function(m) {
       return {
+        id: s,
         name: m.o.value.toLowerCase(),
         lang: m.o["xml:lang"]
       };

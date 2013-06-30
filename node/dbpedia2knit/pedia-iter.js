@@ -87,17 +87,21 @@
   };
 
   createNames = function(domain, isPerson, items) {
-    var data;
+    var data, i, _i, _len;
 
-    data = items.map(function(m) {
-      return {
-        _id: m.name + ":" + m.lang,
-        _type: domain,
-        val: m.name,
-        lang: m.lang,
-        uri: m.id
-      };
-    });
+    data = [];
+    for (_i = 0, _len = items.length; _i < _len; _i++) {
+      i = items[_i];
+      data = data.concat(i.map(function(m) {
+        return {
+          _id: m.name + ":" + m.lang,
+          _type: domain,
+          val: m.name,
+          lang: m.lang,
+          uri: m.id
+        };
+      }));
+    }
     return es.bulk(_ES_URI, (isPerson ? "person-names" : "org-names"), data, function() {});
   };
 

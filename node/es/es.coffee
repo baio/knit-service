@@ -129,6 +129,14 @@ bkp = (opts, done) ->
     (ck) -> copy opts, ck
   ], done
 
+
+query = (uri, index, q, done) ->
+  req.post uri : "#{uri}/#{index}/_search", body : JSON.stringify(q), (err, res) ->
+    if !err
+      done null, JSON.parse(res.body).hits.hits.map (m) -> m._source
+    else
+      done err
+
 # ##Private API##
 _r = (uri, index, method, body, done) ->
   _r_oper uri, index, null, method, body, done
@@ -157,4 +165,5 @@ exports.copy = copy
 exports.bulk = bulk
 exports.map = map
 exports.bkp = bkp
+exports.query = query
 

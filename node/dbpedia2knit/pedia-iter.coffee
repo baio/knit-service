@@ -60,9 +60,10 @@ createPrdeicateNames = (domain, items) ->
         es.bulk _ES_URI, "predicates", data, ->
 
 createNames = (domain, isPerson, items) ->
-
-  data = items.map (m) ->
-    _id : m.name + ":" + m.lang, _type: domain, val: m.name, lang: m.lang, uri: m.id
+  data = []
+  for i in items
+    data = data.concat i.map (m)
+      -> _id : m.name + ":" + m.lang, _type: domain, val: m.name, lang: m.lang, uri: m.id
 
   es.bulk _ES_URI, (if isPerson then "person-names" else "org-names"), data, ->
 
