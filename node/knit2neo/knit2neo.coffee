@@ -1,6 +1,7 @@
 async = require "async"
 mongo = require "../baio-mongo/mongo"
-es = require "../es/es"
+es = require "../baio-es/es"
+neo = require "../baio-neo4j/neo4j"
 
 _ES_URI = process.env.ES_URI
 _LANGS = ["ru", "en"]
@@ -110,6 +111,9 @@ convert = (done) ->
         mongo.close coll
       done err
 
-convert (err) ->
-  console.log err
+#convert (err) ->
+#console.log err
 
+neo.setConfig  uri : "http://localhost:7474/db/data/cypher"
+neo.query "start n=node(*) return n;", null, (err, data) ->
+  console.log err, data
