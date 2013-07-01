@@ -16,7 +16,7 @@
 
   _q_children_orgs = require("./pedia-children-orgs");
 
-  es = require("../es/es");
+  es = require("../baio-es/es");
 
   mongo = require("../baio-mongo/mongo");
 
@@ -30,7 +30,7 @@
     uri: process.env.MONGO_URI
   });
 
-  init_people_query = "select distinct ?s\nwhere\n{\n{?s dcterms:subject category:Russian_businesspeople.}\nunion\n{?s dcterms:subject category:Russian_politicians.}\nunion\n{?s a yago:RussianPoliticians.}\n}";
+  init_people_query = "select distinct ?s\nwhere\n{\n{?s dcterms:subject category:Russian_businesspeople.}\nunion\n{?s dcterms:subject category:Russian_politicians.}\nunion\n{?s a yago:RussianPoliticians.}\n  }";
 
   getName = function(s, isPerson, done) {
     if (isPerson) {

@@ -5,7 +5,7 @@ _q_org_name = require "./pedia-org-name"
 _q_predicate_name = require "./pedia-predicate-name"
 _q_children_people = require "./pedia-children-people"
 _q_children_orgs = require "./pedia-children-orgs"
-es = require "../es/es"
+es = require "../baio-es/es"
 mongo = require "../baio-mongo/mongo"
 mongodb = require "mongodb"
 
@@ -15,16 +15,16 @@ _SPARQL_URI = "http://dbpedia.org/sparql"
 mongo.setConfig(uri: process.env.MONGO_URI)
 
 init_people_query = """
-                    select distinct ?s
-                    where
-                    {
-                    {?s dcterms:subject category:Russian_businesspeople.}
-                    union
-                    {?s dcterms:subject category:Russian_politicians.}
-                    union
-                    {?s a yago:RussianPoliticians.}
+                  select distinct ?s
+                  where
+                  {
+                  {?s dcterms:subject category:Russian_businesspeople.}
+                  union
+                  {?s dcterms:subject category:Russian_politicians.}
+                  union
+                  {?s a yago:RussianPoliticians.}
                     }
-                    """
+                  """
 
 
 #//////////////////////////////
@@ -62,8 +62,8 @@ createPrdeicateNames = (domain, items) ->
 createNames = (domain, isPerson, items) ->
   data = []
   for i in items
-    data = data.concat i.map (m)
-      -> _id : m.name + ":" + m.lang, _type: domain, val: m.name, lang: m.lang, uri: m.id
+    data = data.concat i.map (m) ->
+      _id : m.name + ":" + m.lang, _type: domain, val: m.name, lang: m.lang, uri: m.id
 
   es.bulk _ES_URI, (if isPerson then "person-names" else "org-names"), data, ->
 
@@ -164,5 +164,4 @@ _iter = (query, isPerson, done) ->
 
 
 module.exports = (done) ->
-
   _iter init_people_query, true, done

@@ -14,6 +14,10 @@
 
   _LANGS = ["ru", "en"];
 
+  neo.setConfig({
+    uri: process.env.NEO4J_URI
+  });
+
   _isUri = function(name) {
     if (name.match(/^\w+:.*$/)) {
       return true;
@@ -140,7 +144,22 @@
   };
 
   _updateLinks = function(links) {
-    return console.log(links);
+    "{ predicate: { uri: 'da:almamater', names: [Object] },\nsubject:\n{ uri: 'http://dbpedia.org/resource/Alexei_Kudrin',\nnames: [Object] },\nobject:\n{ uri: 'http://dbpedia.org/resource/Saint_Petersburg_State_University',\nnames: [Object] },\nurl: 'http://dbpedia.org/resource/Alexei_Kudrin',\ncontrib: '51d12046de605ab817000247',\ncontribs: [ '51d12046de605ab817000247' ],\nurls: [ 'http://dbpedia.org/resource/Alexei_Kudrin' ] }";
+    var link, nodes, rel, relations, _i, _len;
+
+    nodes = [];
+    relations = [];
+    for (_i = 0, _len = links.length; _i < _len; _i++) {
+      link = links[_i];
+      nodes.push(link.subject);
+      nodes.push(link.object);
+      rel = link.predicate;
+      rel.urls = link.urls;
+      rel.contribs = link.contribs;
+      relations.push(rel);
+    }
+    console.log(nodes);
+    return console.log(relations);
   };
 
   _map = function(items) {
@@ -184,12 +203,8 @@
     });
   };
 
-  neo.setConfig({
-    uri: "http://localhost:7474/db/data/cypher"
-  });
-
-  neo.query("start n=node(*) return n;", null, function(err, data) {
-    return console.log(err, data);
+  convert(function(err) {
+    return console.log(err);
   });
 
 }).call(this);

@@ -6,6 +6,8 @@ neo = require "../baio-neo4j/neo4j"
 _ES_URI = process.env.ES_URI
 _LANGS = ["ru", "en"]
 
+neo.setConfig  uri : process.env.NEO4J_URI
+
 _isUri = (name) ->
   if name.match(/^\w+:.*$/) then true else false
 
@@ -81,8 +83,32 @@ _groupLinks = (links) ->
   res
 
 _updateLinks = (links) ->
+  """
+  { predicate: { uri: 'da:almamater', names: [Object] },
+  subject:
+  { uri: 'http://dbpedia.org/resource/Alexei_Kudrin',
+  names: [Object] },
+  object:
+  { uri: 'http://dbpedia.org/resource/Saint_Petersburg_State_University',
+  names: [Object] },
+  url: 'http://dbpedia.org/resource/Alexei_Kudrin',
+  contrib: '51d12046de605ab817000247',
+  contribs: [ '51d12046de605ab817000247' ],
+  urls: [ 'http://dbpedia.org/resource/Alexei_Kudrin' ] }
+  """
+  nodes = []
+  relations = []
+  for link in links
+    nodes.push link.subject
+    nodes.push link.object
+    rel = link.predicate
+    rel.urls = link.urls
+    rel.contribs = link.contribs
+    relations.push rel
+
   #for link in links
-  console.log links
+  console.log nodes
+  console.log relations
 
 _map = (items) ->
   async.map items, ((i, ck) -> _mapLink i, ck), (err, links) ->
@@ -111,9 +137,6 @@ convert = (done) ->
         mongo.close coll
       done err
 
-#convert (err) ->
-#console.log err
+convert (err) ->
+  console.log err
 
-neo.setConfig  uri : "http://localhost:7474/db/data/cypher"
-neo.query "start n=node(*) return n;", null, (err, data) ->
-  console.log err, data
