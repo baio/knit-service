@@ -88,8 +88,11 @@
   };
 
   _alignPredicate = function(predicate) {
+    var p;
+
     if (_isUri(predicate)) {
-      return "da:" + (predicate.toLowerCase().match(/^.*\/(.*)$/)[1]);
+      p = "da:" + (predicate.toLowerCase().match(/^.*\/(.*)$/)[1]);
+      return p.substring(0, p.length - 2);
     } else {
       return predicate;
     }
@@ -144,22 +147,67 @@
   };
 
   _updateLinks = function(links) {
-    "{ predicate: { uri: 'da:almamater', names: [Object] },\nsubject:\n{ uri: 'http://dbpedia.org/resource/Alexei_Kudrin',\nnames: [Object] },\nobject:\n{ uri: 'http://dbpedia.org/resource/Saint_Petersburg_State_University',\nnames: [Object] },\nurl: 'http://dbpedia.org/resource/Alexei_Kudrin',\ncontrib: '51d12046de605ab817000247',\ncontribs: [ '51d12046de605ab817000247' ],\nurls: [ 'http://dbpedia.org/resource/Alexei_Kudrin' ] }";
-    var link, nodes, rel, relations, _i, _len;
+    var link, nodes, _i, _len;
 
     nodes = [];
-    relations = [];
     for (_i = 0, _len = links.length; _i < _len; _i++) {
       link = links[_i];
-      nodes.push(link.subject);
       nodes.push(link.object);
-      rel = link.predicate;
-      rel.urls = link.urls;
-      rel.contribs = link.contribs;
-      relations.push(rel);
+      nodes.push(link.subject);
     }
-    console.log(nodes);
-    return console.log(relations);
+    return async.waterfall([
+      function(ck) {
+        return neo.createNodesBatch({
+          index: "wiki",
+          keyVal: (function(p) {
+            return {
+              uri: p.uri
+            };
+          }),
+          properties: (function(p) {
+            return {
+              uri: p.uri
+            };
+          }),
+          strategy: "get_or_create"
+        }, nodes, ck);
+      }, function(neoNodes, ck) {
+        var i, _j, _len1;
+
+        i = 0;
+        for (_j = 0, _len1 = links.length; _j < _len1; _j++) {
+          link = links[_j];
+          link.neoObject = neoNodes[i];
+          link.neoSubject = neoNodes[i + 1];
+          i += 2;
+        }
+        return neo.createRelationsBatch({
+          index: "wiki",
+          type: (function(p) {
+            return p.predicate.uri;
+          }),
+          keyVal: (function(p) {
+            return {
+              uri: p.predicate.uri
+            };
+          }),
+          startId: (function(p) {
+            return p.neoObject.body;
+          }),
+          endId: (function(p) {
+            return p.neoSubject.body;
+          }),
+          properties: (function(p) {
+            return {
+              uri: p.predicate.uri
+            };
+          }),
+          strategy: "get_or_create"
+        }, links, ck);
+      }
+    ], function(err) {
+      return console.log(err);
+    });
   };
 
   _map = function(items) {
