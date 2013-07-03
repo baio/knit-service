@@ -91,47 +91,35 @@ _updateLinks = (links) ->
 
   nodes = []
 
+  i = 0
   for link in links
+    link.nodes = [i, i+1]
     nodes.push link.object
     nodes.push link.subject
+    i += 2
 
-  async.waterfall [
-    (ck) ->
-      neo.createNodesBatch {
-        index: "wiki"
-        keyVal: ((p) ->
-          uri: p.uri)
-        properties: ((p) ->
-          uri: p.uri)
-        strategy: "get_or_create"
-      },
-        nodes,
-        ck
-    (neoNodes, ck) ->
-      i = 0
-      for link in links
-        link.neoObject = neoNodes[i]
-        link.neoSubject = neoNodes[i + 1]
-        i += 2
-      neo.createRelationsBatch {
-        index: "wiki"
-        type: ((p) ->
-          p.predicate.uri)
-        keyVal: ((p) ->
-          uri: p.predicate.uri)
-        startId: ((p) ->
-          p.neoObject.body)
-        endId: ((p) ->
-          p.neoSubject.body)
-        properties: ((p) ->
-          uri: p.predicate.uri)
-        strategy: "get_or_create"
-      },
-        links,
-        ck
-  ],
-  (err) ->
-    console.log err
+  neo.createBatch
+    nodeOpts:
+      index: "wiki"
+      keyValue: (m) -> uri : m.uri
+      properties: (m) -> names : m.names.map (m) -> m.lang + ":" + m.name
+    nodes: nodes
+    relOpts:
+      type: (m) ->m.predicate.uri
+      nodesIndexes: (m) -> m.nodes
+      properties: (m, n) ->
+        r =
+          names : m.names.map (m) -> m.lang + ":" + m.name
+          urls : m.urls
+          contribs : m.contribs
+        for u in n.data?.urls
+          if r.urls.indexOf(u) == -1 then r.urls.push u
+        for u in n.data?.contribs
+          if r.contribs.indexOf(u) == -1 then r.contribs.push u
+        r
+    rels : links
+    , (err, data) ->
+      console.log err, data
 
 _map = (items) ->
   async.map items, ((i, ck) ->

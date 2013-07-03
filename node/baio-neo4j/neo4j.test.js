@@ -151,12 +151,23 @@
         },
         nodesIndexes: function(m) {
           return m.nodes;
+        },
+        properties: function(m, n) {
+          var r;
+
+          r = m.properties;
+          r.names = n.data.names;
+          r.names.push("!!!");
+          return r;
         }
       },
       rels: [
         {
           type: "friend",
-          nodes: [0, 1]
+          nodes: [0, 1],
+          properties: {
+            names: ["fuck you"]
+          }
         }
       ]
     };

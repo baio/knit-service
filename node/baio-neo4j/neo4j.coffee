@@ -147,11 +147,12 @@ _createNodes = (nodeOpts, nodes, done) ->
   _q _config.uri + "/batch", "post", batch, done
 
 _createNodesProperties = (nodeOpts, nodes, neoNodes, done) ->
+
   batch = []
   for neoNode, i in neoNodes
     node = nodes[i]
     body = neoNode.body
-    props = nodeOpts?.properties(node)
+    props = nodeOpts.properties?(node)
     if props
       for own prop of props
         batch.push
@@ -169,7 +170,7 @@ _getRelations = (relOpts, rels, neoNodes, done) ->
     batch.push b
     from_to = relOpts.nodesIndexes rel
     start = neoNodes[from_to[0]].body
-    b.to = start.outgoing_relationships + "/" + relOpts.type(rel)
+    b.to = start.outgoing_relationships + "/" + encodeURIComponent(relOpts.type(rel))
 
   _q _config.uri + "/batch", "post", batch, done
 
@@ -189,16 +190,41 @@ _createRelations = (relOpts, rels, neoRelations, neoNodes, done) ->
       b.body =
         key : key
         value : encodeURIComponent(relOpts.keyValue(rel)[key])
-        type : relOpts.type(rel)
+        type : encodeURIComponent(relOpts.type(rel))
         start : start.self
         end : end.self
     else
       b.to = start.create_relationship
       b.body =
         to : end.self
-        type : relOpts.type(rel)
+        type : encodeURIComponent(relOpts.type(rel))
 
-  _q _config.uri + "/batch", "post", batch, done
+  _q _config.uri + "/batch", "post", batch, (err, res) ->
+    if !err
+      i = 0
+      for rel, k in neoRelations
+        if rel.body.length == 0
+          neoRelations[k] = res[i]
+          i++
+      done err, neoRelations
+    else
+      done(err)
+
+
+_createRelationsProperties = (relOpts, rels, neoRels, done) ->
+  batch = []
+  for neoRel, i in neoRels
+    rel = rels[i]
+    for body in neoRel.body
+      props = relOpts.properties?(rel, body)
+      if props
+        for own prop of props
+          batch.push
+            method : "put"
+            to : body.property.replace(_config.uri, "").replace("{key}",  prop)
+            body : props[prop]
+  _q _config.uri + "/batch", "post", batch, (err) ->
+    if !err then done(err, neoRels) else done(err)
 
 
 #http://docs.neo4j.org/chunked/milestone/rest-api-node-properties.html
@@ -212,9 +238,10 @@ exports.createBatch = (batch, done) ->
         async.waterfall [
           (ck) ->
               _getRelations batch.relOpts, batch.rels, neoNodes, ck
-          (neoRelations, ck) ->
-              _createRelations batch.relOpts, batch.rels, neoRelations, neoNodes, ck
-              #(ck, neoRels) -> _createRelationsProperties neoRels, rels, ck
+          (neoRels, ck) ->
+              _createRelations batch.relOpts, batch.rels, neoRels, neoNodes, ck
+          (neoRels, ck) ->
+              _createRelationsProperties batch.relOpts, batch.rels, neoRels, ck
           ], done
       else
         done err, neoNodes

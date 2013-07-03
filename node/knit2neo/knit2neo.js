@@ -147,66 +147,71 @@
   };
 
   _updateLinks = function(links) {
-    var link, nodes, _i, _len;
+    var i, link, nodes, _i, _len;
 
     nodes = [];
+    i = 0;
     for (_i = 0, _len = links.length; _i < _len; _i++) {
       link = links[_i];
+      link.nodes = [i, i + 1];
       nodes.push(link.object);
       nodes.push(link.subject);
+      i += 2;
     }
-    return async.waterfall([
-      function(ck) {
-        return neo.createNodesBatch({
-          index: "wiki",
-          keyVal: (function(p) {
-            return {
-              uri: p.uri
-            };
-          }),
-          properties: (function(p) {
-            return {
-              uri: p.uri
-            };
-          }),
-          strategy: "get_or_create"
-        }, nodes, ck);
-      }, function(neoNodes, ck) {
-        var i, _j, _len1;
-
-        i = 0;
-        for (_j = 0, _len1 = links.length; _j < _len1; _j++) {
-          link = links[_j];
-          link.neoObject = neoNodes[i];
-          link.neoSubject = neoNodes[i + 1];
-          i += 2;
+    return neo.createBatch({
+      nodeOpts: {
+        index: "wiki",
+        keyValue: function(m) {
+          return {
+            uri: m.uri
+          };
+        },
+        properties: function(m) {
+          return {
+            names: m.names.map(function(m) {
+              return m.lang + ":" + m.name;
+            })
+          };
         }
-        return neo.createRelationsBatch({
-          index: "wiki",
-          type: (function(p) {
-            return p.predicate.uri;
-          }),
-          keyVal: (function(p) {
-            return {
-              uri: p.predicate.uri
-            };
-          }),
-          startId: (function(p) {
-            return p.neoObject.body;
-          }),
-          endId: (function(p) {
-            return p.neoSubject.body;
-          }),
-          properties: (function(p) {
-            return {
-              uri: p.predicate.uri
-            };
-          }),
-          strategy: "get_or_create"
-        }, links, ck);
-      }
-    ], function(err) {
-      return console.log(err);
+      },
+      nodes: nodes,
+      relOpts: {
+        type: function(m) {
+          return m.predicate.uri;
+        },
+        nodesIndexes: function(m) {
+          return m.nodes;
+        },
+        properties: function(m, n) {
+          var r, u, _j, _k, _len1, _len2, _ref, _ref1, _ref2, _ref3;
+
+          r = {
+            names: m.names.map(function(m) {
+              return m.lang + ":" + m.name;
+            }),
+            urls: m.urls,
+            contribs: m.contribs
+          };
+          _ref1 = (_ref = n.data) != null ? _ref.urls : void 0;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            u = _ref1[_j];
+            if (r.urls.indexOf(u) === -1) {
+              r.urls.push(u);
+            }
+          }
+          _ref3 = (_ref2 = n.data) != null ? _ref2.contribs : void 0;
+          for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+            u = _ref3[_k];
+            if (r.contribs.indexOf(u) === -1) {
+              r.contribs.push(u);
+            }
+          }
+          return r;
+        }
+      },
+      rels: links
+    }, function(err, data) {
+      return console.log(err, data);
     });
   };
 

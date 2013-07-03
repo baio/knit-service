@@ -77,11 +77,18 @@ createBatch = ->
     relOpts :
       type: (m) -> m.type
       nodesIndexes: (m) -> m.nodes
+      properties: (m, n) ->
+        r = m.properties
+        r.names = n.data.names
+        r.names.push "!!!"
+        r
     rels :
       [
         {
           type : "friend"
           nodes : [0, 1]
+          properties :
+            names : ["fuck you"]
         }
       ]
 
