@@ -2,6 +2,7 @@ async = require "async"
 mongo = require "../baio-mongo/mongo"
 es = require "../baio-es/es"
 neo = require "../baio-neo4j/neo4j"
+undesrcore = require "underscore.inflections"
 
 _ES_URI = process.env.ES_URI
 _LANGS = ["ru", "en"]
@@ -49,8 +50,9 @@ _getNodeName = (name, dom, type, done) ->
 _alignPredicate = (predicate) ->
   if _isUri(predicate)
     #get latest item in path, remove (es?), make singular
-    p = "da:#{predicate.toLowerCase().match(/^.*\/(.*)$/)[1]}"
-    p.substring(0, p.length - 2)
+    p = "#{predicate.toLowerCase().match(/^.*\/(.*)$/)[1]}"
+    p = undesrcore.singularize p
+    "da:" + p
   else
     predicate
 
@@ -87,7 +89,7 @@ _groupLinks = (links) ->
       r.contribs.push link.contrib
   res
 
-_updateLinks = (links) ->
+_updateLinks = (links, done) ->
 
   nodes = []
 
@@ -118,22 +120,31 @@ _updateLinks = (links) ->
           if r.contribs.indexOf(u) == -1 then r.contribs.push u
         r
     rels : links
-    , (err, data) ->
-      console.log err, data
+    , done
 
-_map = (items) ->
+_map = (items, done) ->
   async.map items, ((i, ck) ->
     _mapLink i, ck), (err, links) ->
       links = _groupLinks links
-      _updateLinks links
+      _updateLinks links, done
 
 _readAndConvert = (coll, done) ->
-  coll.find().each (err, doc) ->
-    if !err
-      if doc
-        _map doc.items
-      else
-        done()
+  f = true
+  cursor = coll.find()
+  async.whilst(
+    ->
+      f
+    (ck) ->
+      cursor.nextObject (err, doc) ->
+        if !err
+          if doc
+            _map doc.items, ck
+          else
+            f = false
+            ck()
+        else
+          ck()
+    done)
 
 convert = (done) ->
   mongo.setConfig uri: process.env.MONGO_URI
