@@ -147,7 +147,6 @@ _createNodes = (nodeOpts, nodes, done) ->
   _q _config.uri + "/batch", "post", batch, done
 
 _createNodesProperties = (nodeOpts, nodes, neoNodes, done) ->
-  console.log neoNodes
   batch = []
   for neoNode, i in neoNodes
     node = nodes[i]
@@ -159,6 +158,46 @@ _createNodesProperties = (nodeOpts, nodes, neoNodes, done) ->
           method : "put"
           to : body.property.replace(_config.uri, "").replace("{key}",  prop)
           body : props[prop]
+  _q _config.uri + "/batch", "post", batch, (err) ->
+    if !err then done(err, neoNodes) else done(err)
+
+_getRelations = (relOpts, rels, neoNodes, done) ->
+
+  batch = []
+  for rel in rels
+    b = method : "get"
+    batch.push b
+    from_to = relOpts.nodesIndexes rel
+    start = neoNodes[from_to[0]].body
+    b.to = start.outgoing_relationships + "/" + relOpts.type(rel)
+
+  _q _config.uri + "/batch", "post", batch, done
+
+
+_createRelations = (relOpts, rels, neoRelations, neoNodes, done) ->
+  batch = []
+  for rel, i in rels
+    if neoRelations[i].body.length != 0 then continue
+    b = method : "post"
+    batch.push b
+    from_to = relOpts.nodesIndexes rel
+    start = neoNodes[from_to[0]].body
+    end = neoNodes[from_to[1]].body
+    if relOpts.index
+      b.to =  "/index/relationship/#{relOpts.index}?uniqueness=get_or_create"
+      key = Object.keys(relOpts.keyValue(rel))[0]
+      b.body =
+        key : key
+        value : encodeURIComponent(relOpts.keyValue(rel)[key])
+        type : relOpts.type(rel)
+        start : start.self
+        end : end.self
+    else
+      b.to = start.create_relationship
+      b.body =
+        to : end.self
+        type : relOpts.type(rel)
+
   _q _config.uri + "/batch", "post", batch, done
 
 
@@ -168,9 +207,17 @@ exports.createBatch = (batch, done) ->
     async.waterfall [
       (ck) -> _createNodes batch.nodeOpts, batch.nodes, ck
       (neoNodes, ck) -> _createNodesProperties batch.nodeOpts, batch.nodes, neoNodes, ck
-      #(ck, neoNodes) -> _createRelations neoNodes, rels ck
-      #(ck, neoRels) -> _createRelationsProperties neoRels, rels, ck
-    ], done
+    ], (err, neoNodes) ->
+      if !err and batch.relOpts
+        async.waterfall [
+          (ck) ->
+              _getRelations batch.relOpts, batch.rels, neoNodes, ck
+          (neoRelations, ck) ->
+              _createRelations batch.relOpts, batch.rels, neoRelations, neoNodes, ck
+              #(ck, neoRels) -> _createRelationsProperties neoRels, rels, ck
+          ], done
+      else
+        done err, neoNodes
 
 
 

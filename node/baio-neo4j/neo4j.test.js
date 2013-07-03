@@ -144,6 +144,20 @@
         }, {
           uri: "da:8"
         }
+      ],
+      relOpts: {
+        type: function(m) {
+          return m.type;
+        },
+        nodesIndexes: function(m) {
+          return m.nodes;
+        }
+      },
+      rels: [
+        {
+          type: "friend",
+          nodes: [0, 1]
+        }
       ]
     };
     return neo.createBatch(batch, function(err, data) {

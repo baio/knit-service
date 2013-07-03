@@ -74,6 +74,16 @@ createBatch = ->
           uri : "da:8"
         }
       ]
+    relOpts :
+      type: (m) -> m.type
+      nodesIndexes: (m) -> m.nodes
+    rels :
+      [
+        {
+          type : "friend"
+          nodes : [0, 1]
+        }
+      ]
 
   neo.createBatch batch, (err, data) ->
     console.log err, data
