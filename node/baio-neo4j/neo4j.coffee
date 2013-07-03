@@ -8,7 +8,7 @@ exports.setConfig = (config) ->
 
 _q = (uri, method, data, done) ->
   body = JSON.stringify(data) if data
-  console.log uri
+  console.log uri, data
   req
     uri : uri
     method: method
@@ -127,6 +127,77 @@ exports.getRelation = (startId, type, done) ->
   q = _getGetRelation startId, type
   console.log q
   _q _config.uri + q.path, q.method, null, done
+
+
+_createNodes = (nodeOpts, nodes, done) ->
+
+  batch = []
+  for node in nodes
+    b = method : "post"
+    batch.push b
+    if nodeOpts.index
+      b.to =  "/index/node/#{nodeOpts.index}?uniqueness=get_or_create"
+      key = Object.keys(nodeOpts.keyValue(node))[0]
+      b.body =
+        key : key
+        value : encodeURIComponent(nodeOpts.keyValue(node)[key])
+    else
+      b.to = "/node"
+
+  _q _config.uri + "/batch", "post", batch, done
+
+_createNodesProperties = (nodeOpts, nodes, neoNodes, done) ->
+  console.log neoNodes
+  batch = []
+  for neoNode, i in neoNodes
+    node = nodes[i]
+    body = neoNode.body
+    props = nodeOpts?.properties(node)
+    if props
+      for own prop of props
+        batch.push
+          method : "put"
+          to : body.property.replace(_config.uri, "").replace("{key}",  prop)
+          body : props[prop]
+  _q _config.uri + "/batch", "post", batch, done
+
+
+#http://docs.neo4j.org/chunked/milestone/rest-api-node-properties.html
+exports.createBatch = (batch, done) ->
+
+    async.waterfall [
+      (ck) -> _createNodes batch.nodeOpts, batch.nodes, ck
+      (neoNodes, ck) -> _createNodesProperties batch.nodeOpts, batch.nodes, neoNodes, ck
+      #(ck, neoNodes) -> _createRelations neoNodes, rels ck
+      #(ck, neoRels) -> _createRelationsProperties neoRels, rels, ck
+    ], done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

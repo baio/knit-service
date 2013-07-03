@@ -48,8 +48,38 @@ getRelation = (id) ->
   neo.getRelation id, "friend", (err, data) ->
     console.log err, data
 
+createBatch = ->
 
-getRelation 109
+  batch =
+    nodeOpts :
+      index : "wiki"
+      keyValue: (m) -> uri : m.uri
+      properties: (m) -> m.properties
+    nodes :
+      [
+        {
+          uri : "da:fuck"
+          properties :
+            uri : 15
+            names : ["one", "two"]
+            some : 100500
+        }
+        {
+          uri : "da:chuck"
+          properties :
+            names : ["one"]
+            some : 2000
+        }
+        {
+          uri : "da:8"
+        }
+      ]
+
+  neo.createBatch batch, (err, data) ->
+    console.log err, data
+
+
+createBatch()
 
 #setNodeProperties 15
 #createNode(2)
