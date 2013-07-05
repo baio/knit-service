@@ -10,7 +10,8 @@
     , "dependencies": {
     "request": "latest",
     "async": "latest",
-    "mongodb": "latest"
+    "mongodb": "latest",
+    "amqp" : "latest"
 },
     "devDependencies": {
         "should" : "latest",
