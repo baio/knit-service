@@ -16,6 +16,9 @@ exports.connect = (done) ->
       _con.exchange "", durable : true, autoDelete: false, (exch) ->
         _exch = exch
         done null
+    _con.on "error", (exception) ->
+      console.log exception
+      #done exception
 
 exports.pub = (queue, data) ->
   _exch.publish queue, data, deliveryMode : 2, contentType : "application/json"

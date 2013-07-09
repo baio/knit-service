@@ -11,14 +11,23 @@
   };
 
   start = function(onPop) {
-    return startOpts({
+    var opts;
+
+    opts = {
       amqp: {
         config: {
           url: "amqp://localhost"
         },
         queue: "baio-crawler"
+      },
+      log: {
+        level: 0,
+        write: function(level, code, msg) {
+          return console.log(level, code, msg);
+        }
       }
-    }, onPop);
+    };
+    return startOpts(opts, onPop);
   };
 
   onPopEmpty = function(level, body, done) {

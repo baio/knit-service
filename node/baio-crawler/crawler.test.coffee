@@ -6,11 +6,18 @@ startOpts = (opts, onPop) ->
     console.log "started", err
 
 start = (onPop) ->
-  startOpts  amqp :
-    config :
-      url : "amqp://localhost"
-    queue : "baio-crawler"
-  , onPop
+
+  opts =
+    amqp :
+      config :
+        url : "amqp://localhost"
+      queue : "baio-crawler"
+    log :
+      level : 0
+      write: (level, code, msg) ->
+        console.log level, code, msg
+
+  startOpts opts, onPop
 
 onPopEmpty = (level, body, done) ->
   console.log "onPopEmpty", level

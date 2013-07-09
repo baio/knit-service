@@ -21,7 +21,7 @@
   exports.connect = function(done) {
     if (!_con) {
       _con = amqp.createConnection(_config);
-      return _con.on("ready", function() {
+      _con.on("ready", function() {
         return _con.exchange("", {
           durable: true,
           autoDelete: false
@@ -29,6 +29,9 @@
           _exch = exch;
           return done(null);
         });
+      });
+      return _con.on("error", function(exception) {
+        return console.log(exception);
       });
     }
   };
