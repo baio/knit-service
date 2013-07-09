@@ -13,23 +13,18 @@ exports.connect = (done) ->
   if !_con
     _con = amqp.createConnection _config
     _con.on "ready", ->
-      console.log "ready"
       _con.exchange "", durable : true, autoDelete: false, (exch) ->
         _exch = exch
         done null
 
 exports.pub = (queue, data) ->
-  @_exch.publish queue, data, deliveryMode : 2, contentType : "application/json"
+  _exch.publish queue, data, deliveryMode : 2, contentType : "application/json"
 
 exports.sub = (opts, done) ->
   connectQueue opts.queue, (err, q) ->
       if !err
         #Receive messages
-        ###
-        q.subscribe (message) ->
-          opts.onPop message
-        ###
-        q.subscribe ack : true, prefetchCount : 5, (message) ->
+        q.subscribe ack : true, prefetchCount : 1, (message) ->
           opts.onPop message, -> q.shift()
       done err
 

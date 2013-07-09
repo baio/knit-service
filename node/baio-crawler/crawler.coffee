@@ -1,12 +1,12 @@
 async = require "async"
 req = require "request"
-amqp = require "./../../../node/baio-crawler/amqp"
+amqp = require "../baio-amqp/amqp"
 
 _opts = null
 _parse = null
 
 #send to amqp queue
-push = (level, urls) ->
+push2Amqp = (level, urls) ->
   if urls and urls.length
     for url in urls
       amqp.pub _opts.amqp.queue, level : level, url : url
@@ -14,24 +14,34 @@ push = (level, urls) ->
 #make request
 request = (url, done) ->
   #prepare request url
-  url = "http://" + url if ! /https?:\/\//.match url
+  url = "http://" + url if ! url.match /https?:\/\//
   req
     url : url
     method : "get"
     , done
 
-onPop = (level, url, done) ->
+requestAndParse = (level, url, done) ->
   #here make request, send repsonse body to _opts.parse, push urls returned from parser
   async.waterfall [
     (ck) ->
       request url, ck
-    (resp, ck) ->
-      level = -1
-      body = ""
+    (resp, body, ck) ->
       _parse level, body, ck
   ], done
 
-start = (opts, parse) ->
+
+parseLevel = (level, url, done) ->
+  _done = (err, links) ->
+    if !err
+      push2Amqp level + 1, links
+    done err, links
+  if url
+    requestAndParse level, url, _done
+  else
+    #the vey first parse
+    _parse level, null, _done
+
+start = (opts, parse, done) ->
   _opts = opts
   _parse = parse
   amqp.setConfig opts.amqp.config
@@ -39,25 +49,13 @@ start = (opts, parse) ->
     amqp.sub {
       queue : opts.amqp.queue
       onPop: (data, ack) ->
-        level = data.level
-        url = data.url
-        onPop level, url, (err, links) ->
+        parseLevel data.level, data.url, (err) ->
           if !err
-            push level + 1, links
-          ack()
+            ack()
     }
       , (err) ->
-        console.log err, "subscribed"
+        done err
+        if !err
+          parseLevel -1, null, ->
 
-  #_opts.parse 0, undefined, push
-
-exports = start
-
-start  amqp :
-        config :
-          url : "amqp://localhost"
-        queue : "baio-crawler"
-      , (level, body, done) ->
-          console.log level, body
-          done null
-
+exports.start = start
