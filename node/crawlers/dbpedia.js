@@ -8,7 +8,7 @@
 
   parser = require("./parser");
 
-  getQueryData = function(query, type, offset) {
+  getQueryData = function(query, level, data) {
     return {
       "request": {
         "uri": "http://dbpedia.org/sparql",
@@ -20,44 +20,61 @@
           "timeout": 30000
         }
       },
-      "data": {
-        "type": type,
-        "offset": offset
-      }
+      "data": data,
+      "level": level
     };
   };
 
   onPop = function(level, body, data, done) {
-    var j, offset, people, person, q, _i, _len;
+    var ex, j, offset, people, person, q, _i, _len;
 
-    q = [];
-    if (level === -1) {
-      q.push(getQueryData(queries.peopleReq.replace("{0}", 100).replace("{1}", 0), "people_list", 0));
-    } else {
-      j = JSON.parse(body);
-      people = parser.parsePeople(j);
-      if (data.type === "people_list") {
-        offset = data.offset + 100;
-        for (_i = 0, _len = people.length; _i < _len; _i++) {
-          person = people[_i];
-          q.push(getQueryData(queries.subjectPersonLinks.replace("{0}", person), "links"));
-          q.push(getQueryData(queries.subjectOrgLinks.replace("{0}", person), "links"));
+    try {
+      q = [];
+      if (level === -1) {
+        q.push(getQueryData(queries.peopleReq.replace("{0}", 100).replace("{1}", 0), 0, {
+          offset: 0,
+          type: "people_list"
+        }));
+      } else {
+        j = JSON.parse(body);
+        if (data.type === "people_list") {
+          people = parser.parsePeople(j);
+          offset = data.offset + 100;
+          for (_i = 0, _len = people.length; _i < _len; _i++) {
+            person = people[_i];
+            q.push(getQueryData(queries.subjectPersonLinks.replace("{0}", person), 1, {
+              subject: person,
+              type: "person_person"
+            }));
+            q.push(getQueryData(queries.subjectOrgLinks.replace("{0}", person), 1, {
+              subject: person,
+              type: "person_org"
+            }));
+          }
+          q.push(getQueryData(queries.peopleReq.replace("{0}", 100).replace("{1}", offset), 0, {
+            offset: offset,
+            type: "people_list"
+          }));
+        } else if (data.type === "person_person" || data.type === "person_org") {
+          parser.parseLinks(j, data);
         }
-        q.push(getQueryData(queries.peopleReq.replace("{0}", 100).replace("{1}", offset), "people_list", offset));
-      } else if (data.type === "links") {
-        parser.parseLinks(j);
       }
+      return done(null, q);
+    } catch (_error) {
+      ex = _error;
+      return done(ex);
     }
-    return done(null, q);
   };
 
   opts = {
     amqp: {
       config: {
-        url: "amqp://localhost"
+        url: "amqp://localhost",
+        prefetchCount: 50
       },
       queue: "baio-crawler"
     },
+    slaveLevel: 1,
     log: {
       level: 0,
       write: function(level, code, msg) {

@@ -6,6 +6,26 @@
     });
   };
 
+  exports.parseLinks = function(batch, data) {
+    var linked, links;
+
+    linked = batch.results.bindings.map(function(m) {
+      return {
+        object: m.o.value,
+        predicate: m.p.value
+      };
+    });
+    links = linked.map(function(m) {
+      return {
+        subject: data.subject,
+        predicate: m.predicate,
+        object: m.object,
+        type: data.type
+      };
+    });
+    return console.log(links);
+  };
+
 }).call(this);
 
 /*

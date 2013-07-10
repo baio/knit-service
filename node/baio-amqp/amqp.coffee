@@ -8,6 +8,7 @@ _queues = {}
 
 exports.setConfig = (config) ->
   _config = config
+  _config.prefetchCount ?= 1
 
 exports.connect = (done) ->
   if !_con
@@ -27,8 +28,12 @@ exports.sub = (opts, done) ->
   connectQueue opts.queue, (err, q) ->
       if !err
         #Receive messages
-        q.subscribe ack : true, prefetchCount : 1, (message) ->
-          opts.onPop message, -> q.shift()
+        q.subscribe ack : true, prefetchCount : _config.prefetchCount , (json, headers, info, message) ->
+          opts.onPop json, (f) ->
+            if f
+              message.reject(true)
+            else
+              message.acknowledge()
       done err
 
 connectQueue = (queue, done) ->

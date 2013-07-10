@@ -4,6 +4,8 @@ exports.LOG_LVL_LOW = 0
 
 #high level
 exports.LOG_CODE_AMQP_CONNECT = "LOG_CODE_AMQP_CONNECT"
+exports.LOG_CODE_PARSER_ERROR = "LOG_CODE_PARSER_ERROR"
+exports.LOG_CODE_REQ_ERROR = "LOG_CODE_REQ_ERROR"
 
 #mid level
 exports.LOG_CODE_AMQP_PUSH = "LOG_CODE_AMQP_PUSH"
@@ -19,6 +21,8 @@ _opts = null
 _getLvl = (code) ->
   switch code
     when exports.LOG_CODE_AMQP_CONNECT then return exports.LOG_LVL_HIGH
+    when exports.LOG_CODE_PARSER_ERROR then return exports.LOG_LVL_HIGH
+    when exports.LOG_CODE_REQ_ERROR then return exports.LOG_LVL_HIGH
     when exports.LOG_CODE_AMQP_PUSH then return exports.LOG_LVL_MID
     when exports.LOG_CODE_AMQP_ON_POP then return exports.LOG_LVL_MID
     when exports.LOG_CODE_REQ then return exports.LOG_LVL_LOW

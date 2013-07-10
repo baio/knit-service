@@ -8,9 +8,9 @@
 
   exports.orgNameReq = "select distinct ?s, ?name, ?label, ?foaf_name\nwhere\n{\n?s ?p ?o.\noptional { ?s dbpprop:name ?name }\noptional { ?s rdfs:label ?label }\noptional { ?s foaf:name ?foaf_name }\noptional { ?s dbpprop:nativeName ?native_name }\nFILTER (?s = <{0}>)\n}";
 
-  exports.subjectPersonLinks = "select ?o\nwhere {\n<{0}> ?p ?o.\n?o a dbpedia-owl:Person.\n}";
+  exports.subjectPersonLinks = "select ?p, ?o\nwhere {\n<{0}> ?p ?o.\n?o a dbpedia-owl:Person.\n}";
 
-  exports.subjectOrgLinks = "select ?o\nwhere {\n<{0}> ?p ?o.\n?p rdfs:range ?r.\n?r rdfs:subClassOf dbpedia-owl:Organisation.\n}";
+  exports.subjectOrgLinks = "select ?p, ?o\nwhere {\n<{0}> ?p ?o.\n?p rdfs:range ?r.\n?r rdfs:subClassOf dbpedia-owl:Organisation.\n}";
 
 }).call(this);
 

@@ -57,6 +57,20 @@ amqpSubOncePub5timesThenPubFromSub = (done) ->
           amqp.pub "test", level : 0
         done err
 
+amqpSubPubNoAckFirstTime = (done) ->
+  _f = true
+  amqpConnect ->
+    amqp.sub {
+      queue: "test"
+      onPop: (msg, ack) ->
+        console.log "onPop", msg
+        ack _f
+        _f = false
+    }, (err) ->
+        amqp.pub "test", level : 0
+        done err
+
+
 ###
 amqpPub ->
 
@@ -69,10 +83,17 @@ amqpPub5times ->
 amqpSub (err) ->
   console.log "subscribed", err
 
+###
+
 amqpSubOncePub5times (err) ->
   console.log "amqpSubOncePub5times", err
 
+###
 amqpSubOncePub5timesThenPubFromSub (err) ->
   console.log "amqpSubOncePub5timesThenPubFromSub", err
+
+
+
+amqpSubPubNoAckFirstTime ->
 
 ###

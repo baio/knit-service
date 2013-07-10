@@ -11,6 +11,10 @@
 
   exports.LOG_CODE_AMQP_CONNECT = "LOG_CODE_AMQP_CONNECT";
 
+  exports.LOG_CODE_PARSER_ERROR = "LOG_CODE_PARSER_ERROR";
+
+  exports.LOG_CODE_REQ_ERROR = "LOG_CODE_REQ_ERROR";
+
   exports.LOG_CODE_AMQP_PUSH = "LOG_CODE_AMQP_PUSH";
 
   exports.LOG_CODE_AMQP_ON_POP = "LOG_CODE_AMQP_ON_POP";
@@ -26,6 +30,10 @@
   _getLvl = function(code) {
     switch (code) {
       case exports.LOG_CODE_AMQP_CONNECT:
+        return exports.LOG_LVL_HIGH;
+      case exports.LOG_CODE_PARSER_ERROR:
+        return exports.LOG_LVL_HIGH;
+      case exports.LOG_CODE_REQ_ERROR:
         return exports.LOG_LVL_HIGH;
       case exports.LOG_CODE_AMQP_PUSH:
         return exports.LOG_LVL_MID;

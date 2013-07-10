@@ -15,7 +15,10 @@
   _queues = {};
 
   exports.setConfig = function(config) {
-    return _config = config;
+    var _ref;
+
+    _config = config;
+    return (_ref = _config.prefetchCount) != null ? _ref : _config.prefetchCount = 1;
   };
 
   exports.connect = function(done) {
@@ -48,10 +51,14 @@
       if (!err) {
         q.subscribe({
           ack: true,
-          prefetchCount: 1
-        }, function(message) {
-          return opts.onPop(message, function() {
-            return q.shift();
+          prefetchCount: _config.prefetchCount
+        }, function(json, headers, info, message) {
+          return opts.onPop(json, function(f) {
+            if (f) {
+              return message.reject(true);
+            } else {
+              return message.acknowledge();
+            }
           });
         });
       }

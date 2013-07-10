@@ -47,7 +47,7 @@ FILTER (?s = <{0}>)
 
 exports.subjectPersonLinks =
 """
-select ?o
+select ?p, ?o
 where {
 <{0}> ?p ?o.
 ?o a dbpedia-owl:Person.
@@ -56,7 +56,7 @@ where {
 
 exports.subjectOrgLinks =
 """
-select ?o
+select ?p, ?o
 where {
 <{0}> ?p ?o.
 ?p rdfs:range ?r.
