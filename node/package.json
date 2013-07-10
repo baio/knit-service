@@ -12,7 +12,8 @@
     "async": "latest",
     "mongodb": "latest",
     "amqp" : "latest",
-    "loggly" : "latest"
+    "loggly" : "latest",
+    "nodetime" : "latest"
 },
     "devDependencies": {
         "should" : "latest",

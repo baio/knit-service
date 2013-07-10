@@ -1,3 +1,7 @@
+require('nodetime').profile
+  accountKey: process.env.NODETIME_KEY,
+  appName: 'dbpedia-craw'
+
 craw = require "../../baio-crawler/crawler"
 queries = require "./queries"
 parser = require "./parser"
@@ -40,7 +44,7 @@ opts =
   amqp :
     config :
       url : "amqp://localhost"
-      prefetchCount : 1
+      prefetchCount : 10
     queue : "baio-crawler"
   slaveLevel : -1
   log :
