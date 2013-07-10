@@ -106,33 +106,38 @@
     }
     _parse = parse;
     amqp.setConfig(opts.amqp.config);
-    log.setOpts(opts.log);
-    return amqp.connect(function() {
-      return amqp.sub({
-        queue: opts.amqp.queue,
-        onPop: function(data, ack) {
-          if (_opts.slaveLevel === -1 || data.level === _opts.slaveLevel) {
-            log.write(log.LOG_CODE_AMQP_ON_POP, data);
-            return parseLevel(data.level, data.url, function(err) {
-              return ack(err);
+    return log.setOpts(opts.log, function(err) {
+      if (!err) {
+        return amqp.connect(function() {
+          return amqp.sub({
+            queue: opts.amqp.queue,
+            onPop: function(data, ack) {
+              if (_opts.slaveLevel === -1 || data.level === _opts.slaveLevel) {
+                log.write(log.LOG_CODE_AMQP_ON_POP, data);
+                return parseLevel(data.level, data.url, function(err) {
+                  return ack(err);
+                });
+              } else {
+                return ack(true);
+              }
+            }
+          }, function(err) {
+            log.write(log.LOG_CODE_AMQP_CONNECT, {
+              err: err,
+              opts: opts,
+              opts: _opts
             });
-          } else {
-            return ack(true);
-          }
-        }
-      }, function(err) {
-        log.write(log.LOG_CODE_AMQP_CONNECT, {
-          err: err,
-          opts: opts,
-          opts: _opts
+            done(err);
+            if (!err) {
+              if (_opts.slaveLevel === -1) {
+                return parseLevel(-1, null, function() {});
+              }
+            }
+          });
         });
-        done(err);
-        if (!err) {
-          if (_opts.slaveLevel === -1) {
-            return parseLevel(-1, null, function() {});
-          }
-        }
-      });
+      } else {
+        throw err;
+      }
     });
   };
 

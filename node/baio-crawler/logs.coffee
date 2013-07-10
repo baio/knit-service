@@ -1,3 +1,5 @@
+async = require "async"
+
 exports.LOG_LVL_HIGH = 1000
 exports.LOG_LVL_MID = 500
 exports.LOG_LVL_LOW = 0
@@ -17,6 +19,7 @@ exports.LOG_CODE_REQ_RESP = "LOG_CODE_REQ_RESP"
 exports.LOG_CODE_PARSE_LEVEL = "LOG_CODE_PARSE_LEVEL"
 
 _opts = null
+_writers = []
 
 _getLvl = (code) ->
   switch code
@@ -29,8 +32,36 @@ _getLvl = (code) ->
     when exports.LOG_CODE_REQ_RESP then return exports.LOG_LVL_LOW
     when exports.LOG_CODE_PARSE_LEVEL then return exports.LOG_LVL_LOW
 
-exports.setOpts = (opts) =>
+consoleWriter = (lvl, code, msg) ->
+  console.log lvl, code, msg
+
+appendWriter = (writer) ->
+  _writers.push writer
+
+write = (lvl, code, msg) ->
+  for wr in _writers
+    wr lvl, code, msg
+
+exports.setOpts = (opts, done) =>
   _opts = opts
+  if typeof opts.write == "object"
+    wrs = []
+    wrs.push prop for own prop of opts.write
+    async.map wrs, (name, ck) ->
+      if name == "loggly"
+        exports.getLoggly opts.write["loggly"], (err, writer) -> ck err, writer
+      else if name == "console"
+        ck null, consoleWriter
+      else
+        ck null, opts.write[name]
+    , (err, results) ->
+      if !err
+        appendWriter r for r in results
+      done err
+  else
+    appendWriter opts.write
+    done()
+
 
 exports.write = (code, msg) ->
   if _opts
@@ -38,4 +69,24 @@ exports.write = (code, msg) ->
 
 exports.writeLvl = (lvl, code, msg) ->
   if _opts and _opts.level <= lvl
-    _opts.write lvl, code, msg
+    write lvl, code, msg
+
+exports.getLoggly = (opts, done) ->
+
+  loggly = require "loggly"
+
+  config =
+    subdomain: opts.domain
+    auth:
+      username: opts.username
+      password: opts.password
+    json: true
+
+  client = loggly.createClient config
+
+  client.getInput opts.input, (err, input) ->
+    if !err
+      done err, (lvl, code, msg) ->
+        input.log level : lvl, code : code, msg : msg
+    else
+      done err

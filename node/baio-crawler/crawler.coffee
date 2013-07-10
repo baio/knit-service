@@ -62,24 +62,27 @@ start = (opts, parse, done) ->
   _opts.slaveLevel ?= -1
   _parse = parse
   amqp.setConfig opts.amqp.config
-  log.setOpts opts.log
-  amqp.connect ->
-    amqp.sub {
-      queue : opts.amqp.queue
-      onPop: (data, ack) ->
-        if _opts.slaveLevel == -1 or data.level == _opts.slaveLevel
-          log.write log.LOG_CODE_AMQP_ON_POP, data
-          parseLevel data.level, data.url, (err) ->
-            ack(err)
-        else
-          #slave mode, ignore messages not from the slave level
-          ack(true)
-    }
-      , (err) ->
-        log.write log.LOG_CODE_AMQP_CONNECT, {err : err, opts, opts : _opts}
-        done err
-        if !err
-          if _opts.slaveLevel == -1
-            parseLevel -1, null, ->
+  log.setOpts opts.log, (err) ->
+    if !err
+      amqp.connect ->
+        amqp.sub {
+          queue : opts.amqp.queue
+          onPop: (data, ack) ->
+            if _opts.slaveLevel == -1 or data.level == _opts.slaveLevel
+              log.write log.LOG_CODE_AMQP_ON_POP, data
+              parseLevel data.level, data.url, (err) ->
+                ack(err)
+            else
+              #slave mode, ignore messages not from the slave level
+              ack(true)
+        }
+          , (err) ->
+            log.write log.LOG_CODE_AMQP_CONNECT, {err : err, opts, opts : _opts}
+            done err
+            if !err
+              if _opts.slaveLevel == -1
+                parseLevel -1, null, ->
+    else
+      throw err
 
 exports.start = start

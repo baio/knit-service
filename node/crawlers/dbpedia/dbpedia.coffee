@@ -1,4 +1,4 @@
-craw = require "../baio-crawler/crawler"
+craw = require "../../baio-crawler/crawler"
 queries = require "./queries"
 parser = require "./parser"
 
@@ -40,13 +40,23 @@ opts =
   amqp :
     config :
       url : "amqp://localhost"
-      prefetchCount : 50
+      prefetchCount : 1
     queue : "baio-crawler"
-  slaveLevel : 1
+  slaveLevel : -1
   log :
     level : 0
-    write: (level, code, msg) ->
-      console.log level, code, msg
+    write:
+      loggly:
+        domain: process.env.LOGGLY_DOMAIN
+        username: process.env.LOGGLY_USERNAME
+        password: process.env.LOGGLY_PASSWORD
+        input: process.env.LOGGLY_INPUT
+      console: true
 
 craw.start opts, onPop, (err) ->
   console.log "started", err
+
+"""
+(level, code, msg) ->
+console.log level, code, msg
+"""
