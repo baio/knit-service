@@ -49,11 +49,11 @@ onPop = (level, body, data, done) ->
 crawOpts =
   amqp :
     config :
-      url : "amqp://localhost"
-      prefetchCount : 10
+      url : process.env.AMQP_URI #"amqp://localhost"
+      prefetchCount : process.env.AMQP_PREFETCH_COUNT #10
     queue : null
-  slaveLevel : -1
-  skipInitial : false
+  slaveLevel : process.env.CRAWLER_SLAVE_LEVEL #-1
+  skipInitial : process.env.SKIP_INITIAL #false
   log :
     level : 0
     write:
@@ -62,7 +62,7 @@ crawOpts =
         username: process.env.LOGGLY_USERNAME
         password: process.env.LOGGLY_PASSWORD
         input: process.env.LOGGLY_INPUT
-      console: true
+      console: process.env.CRAWLER_LOG_CONSOLE
 
 exports.start = (opts, done) ->
   _opts = opts

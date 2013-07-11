@@ -81,13 +81,13 @@ require('nodetime').profile
   crawOpts = {
     amqp: {
       config: {
-        url: "amqp://localhost",
-        prefetchCount: 10
+        url: process.env.AMQP_URI,
+        prefetchCount: process.env.AMQP_PREFETCH_COUNT
       },
       queue: null
     },
-    slaveLevel: -1,
-    skipInitial: false,
+    slaveLevel: process.env.CRAWLER_SLAVE_LEVEL,
+    skipInitial: process.env.SKIP_INITIAL,
     log: {
       level: 0,
       write: {
@@ -97,7 +97,7 @@ require('nodetime').profile
           password: process.env.LOGGLY_PASSWORD,
           input: process.env.LOGGLY_INPUT
         },
-        console: true
+        console: process.env.CRAWLER_LOG_CONSOLE
       }
     }
   };
