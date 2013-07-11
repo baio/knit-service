@@ -23,6 +23,10 @@
   store2neo = function(links, done) {
     var batch, i, l, nodes, nodesObj, nodesSubj, _getNodeType, _i, _len;
 
+    if (links.length === 0) {
+      done(null, []);
+      return;
+    }
     _getNodeType = function(link, isSubject) {
       if (isSubject) {
         switch (link.type) {

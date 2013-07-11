@@ -17,6 +17,7 @@ _q = (uri, method, data, done) ->
       'content-type': 'application/json'
       'X-Stream' : true
   , (err, resp) ->
+      #console.log "resp", err
       if !err
         j = if resp.body then JSON.parse resp.body else null
       err = j if Array.isArray(j) and j[0] and (j[0].status < 200 or j[0].status > 299)

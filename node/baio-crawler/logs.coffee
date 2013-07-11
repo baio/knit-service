@@ -18,7 +18,6 @@ exports.LOG_CODE_REQ = "LOG_CODE_REQ"
 exports.LOG_CODE_REQ_RESP = "LOG_CODE_REQ_RESP"
 exports.LOG_CODE_PARSE_LEVEL = "LOG_CODE_PARSE_LEVEL"
 
-_opts = null
 _writers = []
 
 _getLvl = (code) ->
@@ -40,36 +39,30 @@ appendWriter = (writer) ->
 
 write = (lvl, code, msg) ->
   for wr in _writers
-    wr lvl, code, msg
+    if wr.level <= lvl
+      wr.write lvl, code, msg
 
 exports.setOpts = (opts, done) =>
-  _opts = opts
-  if typeof opts.write == "object"
-    wrs = []
-    wrs.push prop for own prop of opts.write
-    async.map wrs, (name, ck) ->
-      if name == "loggly"
-        exports.getLoggly opts.write["loggly"], (err, writer) -> ck err, writer
-      else if name == "console"
-        ck null, (if opts.write["console"] then consoleWriter else null)
-      else
-        ck null, opts.write[name]
-    , (err, results) ->
-      if !err
-        appendWriter r for r in results.filter((f) -> f)
-      done err
-  else
-    appendWriter opts.write
-    done()
-
+  wrs = []
+  wrs.push prop for own prop of opts
+  async.map wrs, (name, ck) ->
+    if name == "loggly"
+      exports.getLoggly opts[name], (err, writer) ->
+        ck err, {name : name, write : writer, level : opts[name].level}
+    else if name == "console"
+      ck null, (if opts[name] then {name : name, write : consoleWriter, level : opts[name].level}  else null)
+    else
+      ck null, {name : name, write : opts[name], level : 0}
+  , (err, results) ->
+    if !err
+      appendWriter r for r in results.filter((f) -> f)
+    done err
 
 exports.write = (code, msg) ->
-  if _opts
-    exports.writeLvl _getLvl(code), code, msg
+  exports.writeLvl _getLvl(code), code, msg
 
 exports.writeLvl = (lvl, code, msg) ->
-  if _opts and _opts.level <= lvl
-    write lvl, code, msg
+  write lvl, code, msg
 
 exports.getLoggly = (opts, done) ->
 

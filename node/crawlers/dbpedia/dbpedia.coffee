@@ -55,14 +55,14 @@ crawOpts =
   slaveLevel : parseInt(process.env.CRAWLER_SLAVE_LEVEL) #-1
   skipInitial : process.env.CRAWLER_SKIP_INITIAL == "true"
   log :
-    level : parseInt(process.env.CRAWLER_LOG_LEVEL)
-    write:
-      loggly:
-        domain: process.env.LOGGLY_DOMAIN
-        username: process.env.LOGGLY_USERNAME
-        password: process.env.LOGGLY_PASSWORD
-        input: process.env.APP_NAME
-      console: process.env.CRAWLER_LOG_CONSOLE == "true"
+    loggly:
+      level: parseInt(process.env.CRAWLER_LOG_LEVEL_LOGGLY)
+      domain: process.env.LOGGLY_DOMAIN
+      username: process.env.LOGGLY_USERNAME
+      password: process.env.LOGGLY_PASSWORD
+      input: process.env.APP_NAME
+    console:
+      level: parseInt(process.env.CRAWLER_LOG_LEVEL_CONSOLE)
 
 exports.start = (opts, done) ->
   _opts = opts

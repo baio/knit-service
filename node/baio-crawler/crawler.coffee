@@ -80,7 +80,7 @@ start = (opts, parse, done) ->
               ack(true)
         }
           , (err) ->
-            log.write log.LOG_CODE_AMQP_CONNECT, {err : err, opts, opts : _opts}
+            log.write log.LOG_CODE_AMQP_CONNECT, {err : err, opts, opts : JSON.stringify(_opts)}
             done err
             if !err
               if _opts.slaveLevel == -1

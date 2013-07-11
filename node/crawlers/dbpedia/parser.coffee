@@ -13,6 +13,10 @@ alignPredicate = (predicate) ->
 
 store2neo = (links, done) ->
 
+  if links.length == 0
+    done(null, [])
+    return
+
   _getNodeType = (link, isSubject) ->
     if isSubject
       switch link.type

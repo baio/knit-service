@@ -129,7 +129,7 @@
             log.write(log.LOG_CODE_AMQP_CONNECT, {
               err: err,
               opts: opts,
-              opts: _opts
+              opts: JSON.stringify(_opts)
             });
             done(err);
             if (!err) {
