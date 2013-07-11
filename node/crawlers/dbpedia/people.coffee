@@ -6,5 +6,6 @@ opts =
   query : (offset) ->
     queries.peopleReq.replace("{0}", 100).replace("{1}", offset)
 
-dbpedia.start opts, (err) ->
-  console.log "strated", err
+exports.start = (done) ->
+  dbpedia.start opts, done
+    

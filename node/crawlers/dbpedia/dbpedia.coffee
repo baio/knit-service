@@ -50,21 +50,21 @@ crawOpts =
   amqp :
     config :
       url : process.env.AMQP_URI #"amqp://localhost"
-      prefetchCount : process.env.AMQP_PREFETCH_COUNT #10
+      prefetchCount : parseInt(process.env.AMQP_PREFETCH_COUNT) #10
     queue : null
-  slaveLevel : process.env.CRAWLER_SLAVE_LEVEL #-1
-  skipInitial : process.env.SKIP_INITIAL #false
+  slaveLevel : parseInt(process.env.CRAWLER_SLAVE_LEVEL) #-1
+  skipInitial : process.env.CRAWLER_SKIP_INITIAL == "true"
   log :
-    level : 0
+    level : parseInt(process.env.CRAWLER_LOG_LEVEL)
     write:
       loggly:
         domain: process.env.LOGGLY_DOMAIN
         username: process.env.LOGGLY_USERNAME
         password: process.env.LOGGLY_PASSWORD
-        input: process.env.LOGGLY_INPUT
-      console: process.env.CRAWLER_LOG_CONSOLE
+        input: process.env.APP_NAME
+      console: process.env.CRAWLER_LOG_CONSOLE == "true"
 
 exports.start = (opts, done) ->
   _opts = opts
-  crawOpts.amqp.queue = "crwaler-dbpedia-#{opts.name}"
+  crawOpts.amqp.queue = process.env.APP_NAME
   craw.start crawOpts, onPop, done

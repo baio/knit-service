@@ -13,9 +13,9 @@
     }
   };
 
-  dbpedia.start(opts, function(err) {
-    return console.log("strated", err);
-  });
+  exports.start = function(done) {
+    return dbpedia.start(opts, done);
+  };
 
 }).call(this);
 

@@ -82,29 +82,29 @@ require('nodetime').profile
     amqp: {
       config: {
         url: process.env.AMQP_URI,
-        prefetchCount: process.env.AMQP_PREFETCH_COUNT
+        prefetchCount: parseInt(process.env.AMQP_PREFETCH_COUNT)
       },
       queue: null
     },
-    slaveLevel: process.env.CRAWLER_SLAVE_LEVEL,
-    skipInitial: process.env.SKIP_INITIAL,
+    slaveLevel: parseInt(process.env.CRAWLER_SLAVE_LEVEL),
+    skipInitial: process.env.CRAWLER_SKIP_INITIAL === "true",
     log: {
-      level: 0,
+      level: parseInt(process.env.CRAWLER_LOG_LEVEL),
       write: {
         loggly: {
           domain: process.env.LOGGLY_DOMAIN,
           username: process.env.LOGGLY_USERNAME,
           password: process.env.LOGGLY_PASSWORD,
-          input: process.env.LOGGLY_INPUT
+          input: process.env.APP_NAME
         },
-        console: process.env.CRAWLER_LOG_CONSOLE
+        console: process.env.CRAWLER_LOG_CONSOLE === "true"
       }
     }
   };
 
   exports.start = function(opts, done) {
     _opts = opts;
-    crawOpts.amqp.queue = "crwaler-dbpedia-" + opts.name;
+    crawOpts.amqp.queue = process.env.APP_NAME;
     return craw.start(crawOpts, onPop, done);
   };
 
