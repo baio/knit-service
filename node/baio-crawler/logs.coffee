@@ -51,12 +51,12 @@ exports.setOpts = (opts, done) =>
       if name == "loggly"
         exports.getLoggly opts.write["loggly"], (err, writer) -> ck err, writer
       else if name == "console"
-        ck null, consoleWriter
+        ck null, (if opts.write["console"] then consoleWriter else null)
       else
         ck null, opts.write[name]
     , (err, results) ->
       if !err
-        appendWriter r for r in results
+        appendWriter r for r in results.filter((f) -> f)
       done err
   else
     appendWriter opts.write

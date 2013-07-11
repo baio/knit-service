@@ -89,16 +89,19 @@
             return ck(err, writer);
           });
         } else if (name === "console") {
-          return ck(null, consoleWriter);
+          return ck(null, (opts.write["console"] ? consoleWriter : null));
         } else {
           return ck(null, opts.write[name]);
         }
       }, function(err, results) {
-        var r, _i, _len;
+        var r, _i, _len, _ref1;
 
         if (!err) {
-          for (_i = 0, _len = results.length; _i < _len; _i++) {
-            r = results[_i];
+          _ref1 = results.filter(function(f) {
+            return f;
+          });
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            r = _ref1[_i];
             appendWriter(r);
           }
         }
