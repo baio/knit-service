@@ -93,7 +93,11 @@
     if (level !== -1) {
       return requestAndParse(level, url, _done);
     } else {
-      return _parse(level, null, null, doneLog(log.LOG_CODE_PARSER_ERROR, _done));
+      if (!_opts.skipInitial) {
+        return _parse(level, null, null, doneLog(log.LOG_CODE_PARSER_ERROR, _done));
+      } else {
+        return _done();
+      }
     }
   };
 

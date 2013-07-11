@@ -1,10 +1,14 @@
+###
 require('nodetime').profile
   accountKey: process.env.NODETIME_KEY,
   appName: 'dbpedia-craw'
+###
 
 craw = require "../../baio-crawler/crawler"
 queries = require "./queries"
 parser = require "./parser"
+
+_opts = null
 
 getQueryData = (query, level, data) ->
   "request":
@@ -23,32 +27,33 @@ onPop = (level, body, data, done) ->
     q = []
     if level == -1
       #initial query
-      q.push getQueryData(queries.peopleReq.replace("{0}", 100).replace("{1}", 0), 0,{offset : 0, type : "people_list"})
+      q.push getQueryData(_opts.query(0), 0,{offset : 0, type : "#{_opts.name}_list"})
       done null, q
     else
       j = JSON.parse(body)
-      if data.type == "people_list"
-        people = parser.parsePeople(j)
+      if data.type == "#{_opts.name}_list"
+        bindings = parser.parseBindings(j)
         offset = data.offset + 100
-        for person in people
-          q.push getQueryData(queries.subjectPersonLinks.replace("{0}", person), 1, {subject : person, type : "person_person"})
-          q.push getQueryData(queries.subjectOrgLinks.replace("{0}", person), 1, {subject : person, type : "person_org"})
+        for binding in bindings
+          q.push getQueryData(queries.subjectPersonLinks.replace("{0}", binding), 1, {subject : binding, type : "#{_opts.name}_person"})
+          q.push getQueryData(queries.subjectOrgLinks.replace("{0}", binding), 1, {subject : binding, type : "#{_opts.name}_org"})
         #next query
-        q.push getQueryData(queries.peopleReq.replace("{0}", 100).replace("{1}", offset), 0, {offset : offset, type : "people_list"})
+        q.push getQueryData(_opts.query(offset), 0, {offset : offset, type : "#{_opts.name}_list"})
         done null, q
-      else if data.type == "person_person" or data.type == "person_org"
+      else if data.type == "#{_opts.name}_person" or data.type == "#{_opts.name}_org"
         parser.parseLinks j, data, (err) ->
           done err, q
   catch ex
     done ex
 
-opts =
+crawOpts =
   amqp :
     config :
       url : "amqp://localhost"
       prefetchCount : 10
-    queue : "baio-crawler"
+    queue : null
   slaveLevel : -1
+  skipInitial : false
   log :
     level : 0
     write:
@@ -59,10 +64,7 @@ opts =
         input: process.env.LOGGLY_INPUT
       console: true
 
-craw.start opts, onPop, (err) ->
-  console.log "started", err
-
-"""
-(level, code, msg) ->
-console.log level, code, msg
-"""
+exports.start = (opts, done) ->
+  _opts = opts
+  crawOpts.amqp.queue = "crwaler-dbpedia-#{opts.name}"
+  craw.start crawOpts, onPop, done

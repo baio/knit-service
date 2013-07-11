@@ -52,9 +52,12 @@ parseLevel = (level, url, done) ->
     done err, links
   log.write log.LOG_CODE_PARSE_LEVEL, level : level, url : url
   if level != -1
-    requestAndParse level, url, _done
+      requestAndParse level, url, _done
   else
-    _parse level, null, null, doneLog(log.LOG_CODE_PARSER_ERROR, _done)
+    if !_opts.skipInitial
+      _parse level, null, null, doneLog(log.LOG_CODE_PARSER_ERROR, _done)
+    else
+      _done()
 
 
 start = (opts, parse, done) ->

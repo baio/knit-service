@@ -91,7 +91,7 @@
     return neo.createBatch(batch, done);
   };
 
-  exports.parsePeople = function(batch) {
+  exports.parseBindings = function(batch) {
     return batch.results.bindings.map(function(d) {
       return d.s.value;
     });

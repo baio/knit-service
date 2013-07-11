@@ -47,7 +47,7 @@ store2neo = (links, done) ->
 
   neo.createBatch batch, done
 
-exports.parsePeople = (batch) ->
+exports.parseBindings = (batch) ->
 
   batch.results.bindings.map (d) -> d.s.value
 
