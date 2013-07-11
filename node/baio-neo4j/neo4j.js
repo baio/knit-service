@@ -19,7 +19,6 @@
     if (data) {
       body = JSON.stringify(data);
     }
-    console.log(uri, data);
     return req({
       uri: uri,
       method: method,
@@ -146,7 +145,6 @@
         body: q.data
       };
     });
-    console.log(data);
     return _q(_config.uri + "/batch", "post", data, done);
   };
 
@@ -163,7 +161,6 @@
         body: q.data
       };
     });
-    console.log(data);
     return _q(_config.uri + "/batch", "post", data, done);
   };
 
@@ -185,7 +182,6 @@
     var q;
 
     q = _getGetRelation(startId, type);
-    console.log(q);
     return _q(_config.uri + q.path, q.method, null, done);
   };
 

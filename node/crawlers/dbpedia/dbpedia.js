@@ -40,6 +40,7 @@
           offset: 0,
           type: "people_list"
         }));
+        return done(null, q);
       } else {
         j = JSON.parse(body);
         if (data.type === "people_list") {
@@ -60,11 +61,13 @@
             offset: offset,
             type: "people_list"
           }));
+          return done(null, q);
         } else if (data.type === "person_person" || data.type === "person_org") {
-          parser.parseLinks(j, data);
+          return parser.parseLinks(j, data, function(err) {
+            return done(err, q);
+          });
         }
       }
-      return done(null, q);
     } catch (_error) {
       ex = _error;
       return done(ex);

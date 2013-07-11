@@ -13,7 +13,9 @@
     "mongodb": "latest",
     "amqp" : "latest",
     "loggly" : "latest",
-    "nodetime" : "latest"
+    "nodetime" : "latest",
+    "underscore.inflections" : "latest",
+    "underscore" : "latest"
 },
     "devDependencies": {
         "should" : "latest",

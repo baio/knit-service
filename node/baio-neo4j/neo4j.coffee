@@ -8,7 +8,7 @@ exports.setConfig = (config) ->
 
 _q = (uri, method, data, done) ->
   body = JSON.stringify(data) if data
-  console.log uri, data
+  #console.log uri, data
   req
     uri : uri
     method: method
@@ -97,7 +97,7 @@ exports.createNodesBatch = (nodeOpts, nodes, done) ->
     to : q.path
     body: q.data
 
-  console.log data
+  #console.log data
   _q _config.uri + "/batch", "post", data, done
 
 exports.createRelationsBatch = (relOpts, rels, done) ->
@@ -108,7 +108,7 @@ exports.createRelationsBatch = (relOpts, rels, done) ->
     to : q.path
     body: q.data
 
-  console.log data
+  #console.log data
   _q _config.uri + "/batch", "post", data, done
 
 
@@ -125,7 +125,7 @@ _getGetRelation = (startId, type) ->
 
 exports.getRelation = (startId, type, done) ->
   q = _getGetRelation startId, type
-  console.log q
+  #console.log q
   _q _config.uri + q.path, q.method, null, done
 
 

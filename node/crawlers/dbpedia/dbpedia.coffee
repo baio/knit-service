@@ -24,6 +24,7 @@ onPop = (level, body, data, done) ->
     if level == -1
       #initial query
       q.push getQueryData(queries.peopleReq.replace("{0}", 100).replace("{1}", 0), 0,{offset : 0, type : "people_list"})
+      done null, q
     else
       j = JSON.parse(body)
       if data.type == "people_list"
@@ -34,9 +35,10 @@ onPop = (level, body, data, done) ->
           q.push getQueryData(queries.subjectOrgLinks.replace("{0}", person), 1, {subject : person, type : "person_org"})
         #next query
         q.push getQueryData(queries.peopleReq.replace("{0}", 100).replace("{1}", offset), 0, {offset : offset, type : "people_list"})
+        done null, q
       else if data.type == "person_person" or data.type == "person_org"
-        parser.parseLinks(j, data)
-    done null, q
+        parser.parseLinks j, data, (err) ->
+          done err, q
   catch ex
     done ex
 
