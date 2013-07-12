@@ -87,7 +87,10 @@ require('nodetime').profile
       queue: null
     },
     slaveLevel: parseInt(process.env.CRAWLER_SLAVE_LEVEL),
-    skipInitial: process.env.CRAWLER_SKIP_INITIAL === "true",
+    skipInitial: {
+      name: process.env.APP_NAME,
+      val: process.env.CRAWLER_SKIP_INITIAL === "true" ? true : process.env.CRAWLER_SKIP_INITIAL === "false" ? void 0 : null
+    },
     log: {
       loggly: {
         level: parseInt(process.env.CRAWLER_LOG_LEVEL_LOGGLY),

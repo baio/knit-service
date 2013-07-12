@@ -53,7 +53,9 @@ crawOpts =
       prefetchCount : parseInt(process.env.AMQP_PREFETCH_COUNT) #10
     queue : null
   slaveLevel : parseInt(process.env.CRAWLER_SLAVE_LEVEL) #-1
-  skipInitial : process.env.CRAWLER_SKIP_INITIAL == "true"
+  skipInitial :
+    name : process.env.APP_NAME
+    val : if process.env.CRAWLER_SKIP_INITIAL == "true" then true else if process.env.CRAWLER_SKIP_INITIAL == "false" else null
   log :
     loggly:
       level: parseInt(process.env.CRAWLER_LOG_LEVEL_LOGGLY)

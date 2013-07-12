@@ -2,6 +2,7 @@ async = require "async"
 req = require "request"
 amqp = require "../baio-amqp/amqp"
 log = require "./logs"
+skipInitialState = require "./skip-initial-state"
 
 _opts = null
 _parse = null
@@ -32,6 +33,14 @@ request = (url, done) ->
   log.write log.LOG_CODE_REQ, opts
   req opts, doneLog(log.LOG_CODE_REQ_ERROR, done)
 
+isSkipInitial = ->
+  if _opts.skipInitial.val == null
+    wasLocked = skipInitialState.lock _opts.skipInitial.name
+    #if initial state was locked already, skip initial
+    return wasLocked
+  else
+    skipInitialState.unlock _opts.skipInitial.name
+    return _opts.skipInitial.val
 
 requestAndParse = (level, url, done) ->
   #here make request, send repsonse body to _opts.parse, push urls returned from parser
@@ -54,7 +63,7 @@ parseLevel = (level, url, done) ->
   if level != -1
       requestAndParse level, url, _done
   else
-    if !_opts.skipInitial
+    if !isSkipInitial()
       _parse level, null, null, doneLog(log.LOG_CODE_PARSER_ERROR, _done)
     else
       _done()
