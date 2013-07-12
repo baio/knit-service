@@ -22,7 +22,7 @@ push2Amqp = (level, urls) ->
       amqp.pub _opts.amqp.queue, level : level, url : url
 
 #make request
-request = (url, done) ->
+request = (url, level, done) ->
 
   if typeof url == "object"
     opts = url.request
@@ -30,8 +30,19 @@ request = (url, done) ->
     opts =
       url : "http://" + url if ! url.match /https?:\/\//
       method : "get"
+
   log.write log.LOG_CODE_REQ, opts
-  req opts, doneLog(log.LOG_CODE_REQ_ERROR, done)
+  #req opts, doneLog(log.LOG_CODE_REQ_ERROR, done)
+  query opts, level, doneLog(log.LOG_CODE_REQ_ERROR, done)
+
+webQuery = (opts, done) ->
+  req opts, (err, resp, body) ->
+    done err, body
+
+query = (opts, level, done) ->
+  q = _opts?.query level
+  q ?= webQuery
+  q opts, done
 
 isSkipInitial = ->
   if _opts.skipInitial.val == null
@@ -46,8 +57,8 @@ requestAndParse = (level, url, done) ->
   #here make request, send repsonse body to _opts.parse, push urls returned from parser
   async.waterfall [
     (ck) ->
-      request url, ck
-    (resp, body, ck) ->
+      request url, level, ck
+    (body, ck) ->
       log.write log.LOG_CODE_REQ_RESP, body
       if typeof url == "object"
         data = url.data
