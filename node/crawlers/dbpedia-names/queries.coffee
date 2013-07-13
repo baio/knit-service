@@ -9,7 +9,7 @@ optional { ?s foaf:surname ?sur_name }
 optional { ?s dbpprop:name ?name }
 optional { ?s rdfs:label ?label }
 optional { ?s foaf:name ?foaf_name }
-FILTER (?s = <{0}>)
+FILTER ({0})
 }
 """
 
@@ -23,7 +23,7 @@ optional { ?s dbpprop:name ?name }
 optional { ?s rdfs:label ?label }
 optional { ?s foaf:name ?foaf_name }
 optional { ?s dbpprop:nativeName ?native_name }
-FILTER (?s = <{0}>)
+FILTER ({0})
 }
 """
 

@@ -57,12 +57,12 @@ requestAndParse = (level, url, done) ->
   #here make request, send repsonse body to _opts.parse, push urls returned from parser
   async.waterfall [
     (ck) ->
-      request url, level, ck
+        request url, level, ck
     (body, ck) ->
       log.write log.LOG_CODE_REQ_RESP, body
       if typeof url == "object"
         data = url.data
-        _parse level, body, data, doneLog(log.LOG_CODE_PARSER_ERROR, ck)
+      _parse level, body, data, doneLog(log.LOG_CODE_PARSER_ERROR, ck)
   ], done
 
 parseLevel = (level, url, done) ->
@@ -79,6 +79,13 @@ parseLevel = (level, url, done) ->
     else
       _done()
 
+parseData = (data, done) ->
+  _done = (err, links) ->
+    if !err and _opts.slaveLevel == -1
+      push2Amqp null, links
+    done err, links
+  log.write log.LOG_CODE_PARSE_DATA, data : data
+  _parse null, null, data, doneLog(log.LOG_CODE_PARSER_ERROR, _done)
 
 start = (opts, parse, done) ->
   _opts = opts
@@ -93,8 +100,10 @@ start = (opts, parse, done) ->
           onPop: (data, ack) ->
             if _opts.slaveLevel == -1 or data.level == _opts.slaveLevel
               log.write log.LOG_CODE_AMQP_ON_POP, data
-              parseLevel data.level, data.url, (err) ->
-                ack(err)
+              if data.level != undefined
+                parseLevel data.level, data.url, ack
+              else
+                parseData data, ack
             else
               #slave mode, ignore messages not from the slave level
               ack(true)

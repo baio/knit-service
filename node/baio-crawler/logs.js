@@ -28,6 +28,8 @@
 
   exports.LOG_CODE_PARSE_LEVEL = "LOG_CODE_PARSE_LEVEL";
 
+  exports.LOG_CODE_PARSE_DATA = "LOG_CODE_PARSE_DATA";
+
   _writers = [];
 
   _getLvl = function(code) {
@@ -47,6 +49,8 @@
       case exports.LOG_CODE_REQ_RESP:
         return exports.LOG_LVL_LOW;
       case exports.LOG_CODE_PARSE_LEVEL:
+        return exports.LOG_LVL_LOW;
+      case exports.LOG_CODE_PARSE_DATA:
         return exports.LOG_LVL_LOW;
     }
   };

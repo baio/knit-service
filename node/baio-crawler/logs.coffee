@@ -17,6 +17,7 @@ exports.LOG_CODE_AMQP_ON_POP = "LOG_CODE_AMQP_ON_POP"
 exports.LOG_CODE_REQ = "LOG_CODE_REQ"
 exports.LOG_CODE_REQ_RESP = "LOG_CODE_REQ_RESP"
 exports.LOG_CODE_PARSE_LEVEL = "LOG_CODE_PARSE_LEVEL"
+exports.LOG_CODE_PARSE_DATA = "LOG_CODE_PARSE_DATA"
 
 _writers = []
 
@@ -30,6 +31,7 @@ _getLvl = (code) ->
     when exports.LOG_CODE_REQ then return exports.LOG_LVL_LOW
     when exports.LOG_CODE_REQ_RESP then return exports.LOG_LVL_LOW
     when exports.LOG_CODE_PARSE_LEVEL then return exports.LOG_LVL_LOW
+    when exports.LOG_CODE_PARSE_DATA then return exports.LOG_LVL_LOW
 
 consoleWriter = (lvl, code, msg) ->
   console.log lvl, code, msg
