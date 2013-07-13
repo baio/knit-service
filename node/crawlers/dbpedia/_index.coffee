@@ -25,9 +25,10 @@ process.env["APP_NAME"] = appName
 process.env["NODETIME_KEY"] = nodetimeKey
 
 fs = require "fs"
+endOfLine = require("os").EOL;
 
 if configFileName
-  lines = fs.readFileSync(configFileName, "utf-8").toString().split('\r\n')
+  lines = fs.readFileSync(configFileName, "utf-8").toString().split(endOfLine)
   for line in lines.filter((f) -> f)
     spt = line.split('=')
     process.env[spt[0]] = spt[1]

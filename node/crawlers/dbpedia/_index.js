@@ -11,7 +11,7 @@ Read comman line parameters
 
 
 (function() {
-  var app, appFileName, appName, configFileName, fs, line, lines, nodetimeKey, spt, _i, _len, _ref;
+  var app, appFileName, appName, configFileName, endOfLine, fs, line, lines, nodetimeKey, spt, _i, _len, _ref;
 
   appFileName = process.argv[2];
 
@@ -39,8 +39,10 @@ Read comman line parameters
 
   fs = require("fs");
 
+  endOfLine = require("os").EOL;
+
   if (configFileName) {
-    lines = fs.readFileSync(configFileName, "utf-8").toString().split('\r\n');
+    lines = fs.readFileSync(configFileName, "utf-8").toString().split(endOfLine);
     _ref = lines.filter(function(f) {
       return f;
     });
