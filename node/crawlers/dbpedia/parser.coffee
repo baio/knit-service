@@ -1,6 +1,7 @@
 _ = require "underscore"
 inflect = require "underscore.inflections"
 neo = require "../../baio-neo4j/neo4j"
+amqp = require "../../baio-amqp/amqp"
 
 neo.setConfig uri: process.env.NEO4J_URI
 
@@ -11,27 +12,35 @@ alignPredicate = (predicate) ->
   p = inflect.singularize p
   "da:" + p
 
+_getNodeType = (link, isSubject) ->
+  if isSubject
+    switch link.type
+      when "person_person" then "person"
+      when "person_org" then "person"
+      else return "org"
+  else
+    switch link.type
+      when "person_person" then "person"
+      when "org_person" then "person"
+      else return "org"
+
+_getNodes = (links) ->
+  nodesSubj = links.map((l) -> node: l.subject, type: _getNodeType(l, true))
+  nodesObj = links.map((l) -> node: l.object, type: _getNodeType(l, false))
+  nodesSubj.concat nodesObj
+
+push2namesParser = (data) ->
+  #send to parse-names queue
+  nodes = _.uniq _getNodes(data.links), false, (i) -> JSON.stringify(i)
+  amqp.pub process.env.CRAWLER_NAMES_APP_NAME, predicates : data.predicates, nodes : nodes
+
 store2neo = (links, done) ->
 
   if links.length == 0
     done(null, [])
     return
 
-  _getNodeType = (link, isSubject) ->
-    if isSubject
-      switch link.type
-        when "person_person" then "person"
-        when "person_org" then "person"
-        else return "org"
-    else
-      switch link.type
-        when "person_person" then "person"
-        when "org_person" then "person"
-        else return "org"
-
-  nodesSubj = links.map((l) -> node: l.subject, type: _getNodeType(l, true))
-  nodesObj = links.map((l) -> node: l.object, type: _getNodeType(l, false))
-  nodes = nodesSubj.concat nodesObj
+  nodes = _getNodes links
 
   i = 0
   for l, i in links
@@ -59,14 +68,22 @@ exports.parseLinks = (batch, data, done) ->
 
   linked = batch.results.bindings.map (m) -> object : m.o.value, predicate : m.p.value
 
+  predicates = linked.map (m) ->
+    key : m.predicate
+    aligned : alignPredicate(m.predicate)
+
   links = linked.map (m) ->
     subject : data.subject
     predicate : alignPredicate(m.predicate)
     object : m.object
     type : data.type
 
-  links = _.uniq(links)
-
+  console.log links
+  predicates = _.uniq(predicates, false, (i) -> JSON.stringify(i))
+  links = _.uniq(links, false, (i) -> JSON.stringify(i))
+  push2namesParser
+    predicates : predicates
+    links : links
   store2neo links, done
 
 
