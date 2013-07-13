@@ -17,11 +17,11 @@
   _parse = null;
 
   doneLog = function(errCode, done) {
-    return function(err, arg1, arg2) {
+    return function(err, arg1) {
       if (err) {
         log.write(errCode, err);
       }
-      return done(err, arg1, arg2);
+      return done(err, arg1);
     };
   };
 
@@ -72,7 +72,7 @@
   query = function(opts, level, done) {
     var q;
 
-    q = _opts != null ? _opts.query(level) : void 0;
+    q = typeof _opts.query === "function" ? _opts.query(level) : void 0;
     if (q == null) {
       q = webQuery;
     }

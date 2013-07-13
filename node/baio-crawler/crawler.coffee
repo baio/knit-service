@@ -8,10 +8,10 @@ _opts = null
 _parse = null
 
 doneLog = (errCode, done) ->
-  (err, arg1, arg2) ->
+  (err, arg1) ->
     if err
       log.write errCode, err
-    done err, arg1, arg2
+    done err, arg1
 
 #send to amqp queue
 push2Amqp = (level, urls) ->
@@ -40,7 +40,7 @@ webQuery = (opts, done) ->
     done err, body
 
 query = (opts, level, done) ->
-  q = _opts?.query level
+  q = _opts.query? level
   q ?= webQuery
   q opts, done
 
