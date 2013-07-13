@@ -41,6 +41,14 @@
                         }
                     },
                     "type": "multi_field"
+                },
+                "lang" : {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "key" : {
+                    "index": "not_analyzed",
+                    "type": "string"
                 }
             }
         }

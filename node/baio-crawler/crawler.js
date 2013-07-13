@@ -32,7 +32,7 @@
       _results = [];
       for (_i = 0, _len = urls.length; _i < _len; _i++) {
         url = urls[_i];
-        if (url.level) {
+        if (url.level !== void 0) {
           level = url.level;
         }
         log.write(log.LOG_CODE_AMQP_PUSH, {

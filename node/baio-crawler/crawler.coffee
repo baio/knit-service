@@ -17,7 +17,7 @@ doneLog = (errCode, done) ->
 push2Amqp = (level, urls) ->
   if urls and urls.length
     for url in urls
-      level = url.level if url.level
+      level = url.level if url.level != undefined
       log.write log.LOG_CODE_AMQP_PUSH, {level : level, url : url}
       amqp.pub _opts.amqp.queue, level : level, url : url
 

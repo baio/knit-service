@@ -15,7 +15,14 @@ getNeoQueryData = (query, level, data) ->
   "level" : level
 
 getPediaQueryData = (query, level, data) ->
-  "request": query
+  "request":
+    "uri": "http://dbpedia.org/sparql"
+    "method":"get"
+    "qs":
+      "default-graph-uri" : "http://dbpedia.org",
+      "query" : query,
+      "format":"application/sparql-results+json"
+      "timeout":30000
   "data": data
   "level" : level
 
@@ -25,8 +32,8 @@ neoQuery = (opts, done) ->
 ###
   Levels :
   1. -1, query to neo
-  2. 0 - parse from pedia
-  3. 1 - query to pedia
+  2. 0 - parse from pedia, query to neo
+  3. 1 - query to neo pedia
 ###
 onPop = (level, body, data, done) ->
   try
@@ -34,20 +41,23 @@ onPop = (level, body, data, done) ->
     q = []
     if level == -1 or level == 0
       #read nodes
-      q.push getNeoQueryData "start n=node(*) return n skip #{offset} limit 1", 0, {offset : offset}
-      offset += 1
+      q.push getNeoQueryData "start n=node:wiki(\"uri:*\") return n skip #{offset} limit 1;", 1, {offset : offset + 1}
       if level == 0
-        parser.parseNames body, data.type, done
+        j = JSON.parse body
+        parser.parseNames j, data.type, (err) ->
+          done err, q
       else
         done null, q
     else if level == 1
-      j = JSON.parse(body)
+      j = body
       if j
         node = parser.parseNode(j)
-        if node.type == "perosn"
+        if node.type == "person"
           q.push getPediaQueryData queries.personNameReq.replace("{0}", node.value), 0, {type : "person", offset : offset}
         else if node.type == "org"
-          q.push getPediaQueryData queries.personOrgReq.replace("{0}", node.value), 0, {type : "org", offset : offset}
+          q.push getPediaQueryData queries.orgNameReq.replace("{0}", node.value), 0, {type : "org", offset : offset}
+        else
+          throw "node type out of range"
       done null, q
     else
       throw "level out of range"
@@ -74,7 +84,7 @@ crawOpts =
     console:
       level: parseInt(process.env.CRAWLER_LOG_LEVEL_CONSOLE)
   query : (level) ->
-    if level == -1 or level == 0
+    if level == 1
       return neoQuery
     else
       return null
