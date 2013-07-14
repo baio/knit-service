@@ -52,7 +52,7 @@
     docs = names.map(function(m) {
       return {
         _id: m.val,
-        _type: type,
+        _type: "dbpedia",
         val: m.val,
         lang: m.lang,
         key: m.key
@@ -73,7 +73,7 @@
         val: val,
         lang: "en",
         _id: val,
-        _type: "predicate"
+        _type: "dbpedia"
       };
     });
     nodes = data.nodes;
