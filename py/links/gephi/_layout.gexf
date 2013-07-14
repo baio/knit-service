@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" version="1.2">
+    <meta lastmodifieddate="2009-03-20">
+        <creator>Gexf.net</creator>
+        <description>Links file</description>
+    </meta>
+    <graph mode="static" defaultedgetype="undirected">
+        <attributes class="edge">
+            <attribute id="url" title="url" type="string"/>
+            <attribute id="family_rel" title="family relations type" type="string"/>
+            <attribute id="prof_rel" title="professional relation type" type="string"/>
+            <attribute id="private_rel" title="private relation type" type="string"/>
+        </attributes>
+        <nodes>
+        </nodes>
+        <edges>
+        </edges>
+    </graph>
+</gexf>

@@ -1,0 +1,6 @@
+web.py
+pymongo
+requests
+simplejson
+pyyaml
+regex

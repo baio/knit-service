@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" version="1.2" xmlns:viz="http://www.gexf.net/1.2draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd">
+  <meta lastmodifieddate="2013-04-29">
+    <creator>Gephi 0.8.1</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static">
+    <attributes class="edge" mode="static">
+      <attribute id="url" title="url" type="string"></attribute>
+      <attribute id="family_rel" title="family relations type" type="string"></attribute>
+      <attribute id="prof_rel" title="professional relation type" type="string"></attribute>
+      <attribute id="private_rel" title="private relation type" type="string"></attribute>
+    </attributes>
+    <nodes>
+      <node id="татьяна_голикова" label="татьяна голикова">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.48229966" y="0.49781302" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="алексей_богданчиков" label="алексей богданчиков">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.1328274" y="0.6868861" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="лев_григорьев" label="лев григорьев">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="1.0" y="0.32110214" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="владимир_путин" label="владимир путин">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.0" y="0.9958489" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="елена_скрынник" label="елена скрынник">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.7331369" y="1.0" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="андрей_реус" label="андрей реус">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.7431345" y="0.52316517" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="виктор_чемезов" label="виктор чемезов">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.7277362" y="0.6915508" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="марат_сакаев" label="марат сакаев">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.65879965" y="0.09449173" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="юлия_христенко" label="юлия христенко">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.31584048" y="0.7649973" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="геннадий_тимченко" label="геннадий тимченко">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.15461497" y="0.9115185" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="ирина_сакаева" label="ирина сакаева">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.5654158" y="0.18246207" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="юлия_богданчикова" label="юлия богданчикова">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.26980284" y="0.8028508" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="виктор_харитонин" label="виктор харитонин">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.8354875" y="0.0" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="виктор_христенко" label="виктор христенко">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.4191094" y="0.9955728" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="александр_миронов" label="александр миронов">
+        <attvalues></attvalues>
+        <viz:size value="NaN"></viz:size>
+        <viz:position x="0.6479812" y="0.3044109" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="татьяна_голикова" target="лев_григорьев">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="private_rel" value="друг"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="андрей_реус">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="private_rel" value="друг"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="виктор_чемезов">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="private_rel" value="друг"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="ирина_сакаева">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="двоюрод"></attvalue>
+          <attvalue for="prof_rel" value="служба"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="александр_миронов">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="служба"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="алексей_богданчиков" target="геннадий_тимченко">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="партнер"></attvalue>
+          <attvalue for="private_rel" value="друг"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="лев_григорьев" target="марат_сакаев">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="лобби"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="елена_скрынник" target="виктор_чемезов">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="служба"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="елена_скрынник" target="виктор_христенко">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="брат"></attvalue>
+          <attvalue for="prof_rel" value="служба"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="андрей_реус" target="лев_григорьев">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="лобби"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_чемезов" target="лев_григорьев">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="лобби"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_чемезов" target="андрей_реус">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="служба"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="марат_сакаев" target="виктор_харитонин">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="лобби"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="юлия_христенко" target="татьяна_голикова">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="сын"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="юлия_христенко" target="виктор_христенко">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="сын"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="геннадий_тимченко" target="владимир_путин">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="private_rel" value="кореш"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="ирина_сакаева" target="лев_григорьев">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="private_rel" value="друг"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="ирина_сакаева" target="марат_сакаев">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="муж"></attvalue>
+          <attvalue for="prof_rel" value="служба"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="юлия_богданчикова" target="алексей_богданчиков">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="муж"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="юлия_богданчикова" target="юлия_христенко">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="замуж"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_харитонин" target="лев_григорьев">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="двоюрод"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_христенко" target="татьяна_голикова">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="family_rel" value="муж"></attvalue>
+          <attvalue for="prof_rel" value="служба"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_христенко" target="андрей_реус">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="private_rel" value="друг"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_христенко" target="виктор_чемезов">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="private_rel" value="друг"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="александр_миронов" target="лев_григорьев">
+        <attvalues>
+          <attvalue for="url" value="http://goo.gl/ohEX4"></attvalue>
+          <attvalue for="prof_rel" value="служба"></attvalue>
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
