@@ -17,7 +17,7 @@
 
     names = [];
     body.results.bindings.forEach(function(m) {
-      if (m.given_name) {
+      if (m.given_name && m.sur_name) {
         names.push({
           key: m.s.value,
           val: _alignName(m.given_name.value + " " + m.sur_name.value),

@@ -30,6 +30,9 @@ req = require "request"
 #
 
 bulk = (uri, index, docs, done) ->
+  if !docs.length
+    done(null, [])
+    return
   res = ""
   for doc in docs
     obj = { "index" : { "_index" : index, "_type" : doc._type, "_id" : doc._id } }

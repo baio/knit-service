@@ -11,6 +11,10 @@
   bulk = function(uri, index, docs, done) {
     var doc, obj, res, _i, _len;
 
+    if (!docs.length) {
+      done(null, []);
+      return;
+    }
     res = "";
     for (_i = 0, _len = docs.length; _i < _len; _i++) {
       doc = docs[_i];

@@ -8,7 +8,7 @@ _alignName = (name) ->
 exports.parseNames = (body, type, done) ->
   names = []
   body.results.bindings.forEach (m) ->
-    if m.given_name
+    if m.given_name and m.sur_name
       names.push key : m.s.value,  val : _alignName(m.given_name.value + " " + m.sur_name.value), lang : m.given_name["xml:lang"]
     if m.name
       names.push key : m.s.value,  val : _alignName(m.name.value), lang : m.name["xml:lang"]
