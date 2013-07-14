@@ -64,6 +64,8 @@
   };
 
   webQuery = function(opts, done) {
+    opts.qs.query = opts.qs.query.replace(/<([^>]*)>/g, "iri('$1')");
+    console.log(opts.qs.query);
     return req(opts, function(err, resp, body) {
       return done(err, body);
     });

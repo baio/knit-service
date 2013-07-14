@@ -36,6 +36,8 @@ request = (url, level, done) ->
   query opts, level, doneLog(log.LOG_CODE_REQ_ERROR, done)
 
 webQuery = (opts, done) ->
+  opts.qs.query = opts.qs.query.replace /<([^>]*)>/g, "iri('$1')"
+  console.log opts.qs.query
   req opts, (err, resp, body) ->
     done err, body
 

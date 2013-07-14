@@ -46,7 +46,7 @@ def bset(l):
     content = yaml.load(res.content)
     return map(lambda x: x["index"]["ok"] if "index" in x else x["create"]["_id"], content["items"])
 
-def get(index, type, val, ex_filter = None, val_field_name = "val", search_val_field_name = "val.autocomplete"):
+def get(index, type, val, ex_filter = None, val_field_name = "val", search_val_field_name = "val.autocomplete", id_field_name = "_id"):
     if not _elastic_host_url: return []
     d = {"query": {
         "bool": {
@@ -62,4 +62,5 @@ def get(index, type, val, ex_filter = None, val_field_name = "val", search_val_f
     res = req.post(_elastic_host_url + "/" + index + "/" + type + "/_search", data=json.dumps(d))
     hits = yaml.load(res.content)["hits"]
     hits = hits["hits"] if len(hits) > 0 else []
-    return map(lambda x: (x["_id"], x["_source"][val_field_name], x["_index"], x["_type"]), hits)
+    return map(lambda x: (x[id_field_name] if id_field_name == "_id" else x["_source"][id_field_name],
+                          x["_source"][val_field_name], x["_index"], x["_type"]), hits)

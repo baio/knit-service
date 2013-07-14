@@ -5,6 +5,29 @@ import os
 from dom.connection import get_db
 from  bson.objectid import ObjectId
 from py2neo import neo4j, cypher
+from es import elastic_search_v2 as es
+import urllib
+
+def get_shortest_path_neo(name_1, name_2):
+    name_1 = name_1.encode("utf8")
+    name_2 = name_2.encode("utf8")
+    hits_1 = es.get("person-names", "dbpedia", name_1, id_field_name="key")
+    hits_2 = es.get("person-names", "dbpedia", name_2, id_field_name="key")
+    if len(hits_1) > 0 and len(hits_2) > 0:
+        key_1 =  urllib.quote(hits_1[0][0], safe='~()*!.\'')
+        key_2 = urllib.quote(hits_1[0][0], safe='~()*!.\'')
+    else:
+        return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": [], "edges": []}
+    graph_db = neo4j.GraphDatabaseService(os.getenv("NEO4J_URI"))
+    query = "START n=node:dbpedia(\"uri:{}\"), m=node:dbpedia(\"uri:{}\") MATCH p = shortestPath(n-[*]-m) RETURN p;"\
+        .format(key_1, key_2)
+    data, metadata = cypher.execute(graph_db, query)
+    if len(data) == 0:
+        return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": [], "edges": []}
+    refs = map(lambda x: x.get_properties()["refs"], data[0][0].relationships)
+    plain_refs = sum(refs, [])
+    return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": [], "edges": []}
+
 
 def get_shortest_path(name_1, name_2):
     name_1 = name_1.encode("utf8")
