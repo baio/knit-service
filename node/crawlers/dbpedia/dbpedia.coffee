@@ -56,6 +56,9 @@ crawOpts =
   skipInitial :
     name : process.env.APP_NAME
     val : if process.env.CRAWLER_SKIP_INITIAL == "true" then true else if process.env.CRAWLER_SKIP_INITIAL == "false" else null
+  beforeQuery: (opts) ->
+    opts.qs.query = opts.qs.query.replace /([^('])'([^)])/g, "$1\\'$2"
+    opts.qs.query = opts.qs.query.replace /<([^>]*)>/g, "`iri('$1')`"
   log :
     loggly:
       level: parseInt(process.env.CRAWLER_LOG_LEVEL_LOGGLY)

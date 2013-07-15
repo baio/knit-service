@@ -79,6 +79,10 @@
       name: process.env.APP_NAME,
       val: process.env.CRAWLER_SKIP_INITIAL === "true" ? true : process.env.CRAWLER_SKIP_INITIAL === "false" ? void 0 : null
     },
+    beforeQuery: function(opts) {
+      opts.qs.query = opts.qs.query.replace(/([^('])'([^)])/g, "$1\\'$2");
+      return opts.qs.query = opts.qs.query.replace(/<([^>]*)>/g, "iri('$1')");
+    },
     log: {
       loggly: {
         level: parseInt(process.env.CRAWLER_LOG_LEVEL_LOGGLY),

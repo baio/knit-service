@@ -36,9 +36,8 @@ request = (url, level, done) ->
   query opts, level, doneLog(log.LOG_CODE_REQ_ERROR, done)
 
 webQuery = (opts, done) ->
-  opts.qs.query = opts.qs.query.replace /([^('])'([^)])/g, "$1\\'$2"
-  opts.qs.query = opts.qs.query.replace /<([^>]*)>/g, "`iri('$1')`"
-
+  #opts.qs.query = opts.qs.query.replace /([^('])'([^)])/g, "$1\\'$2"
+  #opts.qs.query = opts.qs.query.replace /<([^>]*)>/g, "`iri('$1')`"
   console.log opts.qs.query
   req opts, (err, resp, body) ->
     done err, body
@@ -46,6 +45,8 @@ webQuery = (opts, done) ->
 query = (opts, level, done) ->
   q = _opts.query? level
   q ?= webQuery
+  if _opts.beforeQuery
+    _opts.beforeQuery opts, level
   q opts, done
 
 isSkipInitial = ->

@@ -64,8 +64,6 @@
   };
 
   webQuery = function(opts, done) {
-    opts.qs.query = opts.qs.query.replace(/([^('])'([^)])/g, "$1\\'$2");
-    opts.qs.query = opts.qs.query.replace(/<([^>]*)>/g, "`iri('$1')`");
     console.log(opts.qs.query);
     return req(opts, function(err, resp, body) {
       return done(err, body);
@@ -78,6 +76,9 @@
     q = typeof _opts.query === "function" ? _opts.query(level) : void 0;
     if (q == null) {
       q = webQuery;
+    }
+    if (_opts.beforeQuery) {
+      _opts.beforeQuery(opts, level);
     }
     return q(opts, done);
   };
