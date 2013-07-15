@@ -4,9 +4,9 @@
 
   exports.orgsReq = "select ?s\nwhere\n{\n?s a dbpedia-owl:Organisation.\n}limit {0} offset {1}";
 
-  exports.subjectPersonLinks = "select ?p, ?o\nwhere {\niri('{0}') ?p ?o.\n?o a dbpedia-owl:Person.\n}";
+  exports.subjectPersonLinks = "select ?p, ?o\nwhere {\n`iri('{0}')` ?p ?o.\n?o a dbpedia-owl:Person.\n}";
 
-  exports.subjectOrgLinks = "select ?p, ?o\nwhere {\niri('{0}') ?p ?o.\n?p rdfs:range ?r.\n?r rdfs:subClassOf dbpedia-owl:Organisation.\n}";
+  exports.subjectOrgLinks = "select ?p, ?o\nwhere {\n`iri('{0}')` ?p ?o.\n?p rdfs:range ?r.\n?r rdfs:subClassOf dbpedia-owl:Organisation.\n}";
 
 }).call(this);
 

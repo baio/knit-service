@@ -28,9 +28,9 @@ onPop = (level, body, data, done) ->
         #q.push getPediaQueryData exports.predicateNameReq.replace("{0}", " or ".join(keys.predicates.map(m) -> "?s=<#{m}>")), 0, type : "predicate"
         if !err
           if keys.people.length
-            q.push getPediaQueryData queries.personNameReq.replace("{0}", (keys.people.map((m) -> "?s=iri('#{m}')")).join(" or ")), 0, type : "person"
+            q.push getPediaQueryData queries.personNameReq.replace("{0}", (keys.people.map((m) -> "?s=`iri('#{m}')`")).join(" or ")), 0, type : "person"
           if keys.orgs.length
-            q.push getPediaQueryData queries.orgNameReq.replace("{0}", (keys.orgs.map((m) -> "?s=iri('#{m}')")).join(" or ")), 0, type : "org"
+            q.push getPediaQueryData queries.orgNameReq.replace("{0}", (keys.orgs.map((m) -> "?s=`iri('#{m}')`")).join(" or ")), 0, type : "org"
         done err, q
     else if level == 0
       parser.parseNames JSON.parse(body), data.type, done

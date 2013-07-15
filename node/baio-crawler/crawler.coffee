@@ -37,7 +37,7 @@ request = (url, level, done) ->
 
 webQuery = (opts, done) ->
   opts.qs.query = opts.qs.query.replace /([^('])'([^)])/g, "$1\\'$2"
-  opts.qs.query = opts.qs.query.replace /<([^>]*)>/g, "iri('$1')"
+  opts.qs.query = opts.qs.query.replace /<([^>]*)>/g, "`iri('$1')`"
 
   console.log opts.qs.query
   req opts, (err, resp, body) ->

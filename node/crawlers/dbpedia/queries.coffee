@@ -21,7 +21,7 @@ exports.subjectPersonLinks =
 """
 select ?p, ?o
 where {
-iri('{0}') ?p ?o.
+`iri('{0}')` ?p ?o.
 ?o a dbpedia-owl:Person.
 }
 """
@@ -30,7 +30,7 @@ exports.subjectOrgLinks =
 """
 select ?p, ?o
 where {
-iri('{0}') ?p ?o.
+`iri('{0}')` ?p ?o.
 ?p rdfs:range ?r.
 ?r rdfs:subClassOf dbpedia-owl:Organisation.
 }
