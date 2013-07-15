@@ -2,8 +2,6 @@ __author__ = 'baio'
 
 #! /usr/bin/env python
 
-from os import fork, chdir, setsid, umask
-from sys import exit
 import os
 import sys
 import time
@@ -18,12 +16,14 @@ for line in lines:
 
 
 from server.server import run
+from tests.graph_test import start
 
 
 max_attempts = 3
 for i in xrange(max_attempts):
     try:
-        run()	
+        run()
+        #start()
     except:
         time.sleep(10)
 

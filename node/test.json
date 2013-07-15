@@ -1,0 +1,36 @@
+{
+    "query": {
+        "bool": {
+            "should": [
+                {
+                    "bool": {
+                        "must": {
+                            "match": {
+                                "key": "http://dbpedia.org/resource/Ilana_Rovner"
+                            }
+                        },
+                        "must": {
+                            "match": {
+                                "lang": "en"
+                            }
+                        }
+                    }
+                },
+                {
+                    "bool": {
+                        "must": {
+                            "match": {
+                                "key": "http://dbpedia.org/resource/George_H._W._Bush"
+                            }
+                        },
+                        "must": {
+                            "match": {
+                                "lang": "en"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

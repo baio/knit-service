@@ -98,12 +98,15 @@
     });
   });
 
-  connect().use(connect.cookieParser()).use(connect.bodyParser()).use(_redirect).use(connect.query()).use(connect.session({
-    secret: process.env.SESSION_SECRET,
-    store: new MongoStore({
-      url: process.env.MONGO_STORE
-    })
-  })).use(passport.initialize()).use(passport.session()).use(_router).use(connect["static"]("public")).listen(process.env.PORT || 8001);
+  exports.start = function(done) {
+    connect().use(connect.cookieParser()).use(connect.bodyParser()).use(_redirect).use(connect.query()).use(connect.session({
+      secret: process.env.SESSION_SECRET,
+      store: new MongoStore({
+        url: process.env.MONGO_STORE
+      })
+    })).use(passport.initialize()).use(passport.session()).use(_router).use(connect["static"]("public")).listen(process.env.PORT || 8001);
+    return done(null);
+  };
 
 }).call(this);
 

@@ -8,6 +8,45 @@ from py2neo import neo4j, cypher
 from es import elastic_search_v2 as es
 import urllib
 
+def get_es_names(keys):
+
+    q = """
+        {
+            "query": {
+                "bool": {
+                    "should": [{0}]
+                }
+            }
+        }
+        """
+
+    q_name = """
+                {
+                    "bool": {
+                        "must": {
+                            "match": {
+                                "key": "{0}"
+                            }
+                        },
+                        "must": {
+                            "match": {
+                                "lang": "en"
+                            }
+                        }
+                    }
+                }
+    """
+
+    r = q.replace("{0}", " , ".join(map(lambda key: q_name.replace("{0}", key), keys)))
+
+    res = dict()
+    #lloking for longest names
+    for r in es.search("person-names", "dbpedia", r):
+        if len(res.get(r["key"], "")) < len(r["val"]):
+            res[r["key"]] = r["val"]
+    return res
+
+
 def get_shortest_path_neo(name_1, name_2):
     name_1 = name_1.encode("utf8")
     name_2 = name_2.encode("utf8")
@@ -15,18 +54,50 @@ def get_shortest_path_neo(name_1, name_2):
     hits_2 = es.get("person-names", "dbpedia", name_2, id_field_name="key")
     if len(hits_1) > 0 and len(hits_2) > 0:
         key_1 =  urllib.quote(hits_1[0][0], safe='~()*!.\'')
-        key_2 = urllib.quote(hits_1[0][0], safe='~()*!.\'')
+        key_2 = urllib.quote(hits_2[0][0], safe='~()*!.\'')
     else:
         return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": [], "edges": []}
     graph_db = neo4j.GraphDatabaseService(os.getenv("NEO4J_URI"))
-    query = "START n=node:dbpedia(\"uri:{}\"), m=node:dbpedia(\"uri:{}\") MATCH p = shortestPath(n-[*]-m) RETURN p;"\
+    query = "START n=node:wiki(\"uri:{}\"), m=node:wiki(\"uri:{}\") MATCH p = shortestPath(n-[*]-m) RETURN p;"\
         .format(key_1, key_2)
     data, metadata = cypher.execute(graph_db, query)
-    if len(data) == 0:
+    if len(data) == 0 or len(data[0]) == 0:
         return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": [], "edges": []}
-    refs = map(lambda x: x.get_properties()["refs"], data[0][0].relationships)
-    plain_refs = sum(refs, [])
-    return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": [], "edges": []}
+
+    nodes = dict()
+    rels = []
+
+    def map_node(node_name):
+        return {"id": node_name, "name": node_name, "meta" : {"pos" : [-1, -1]}}
+
+    def map_rel(rel):
+        return {
+            "id": rel.nodes[0]["uri"] + " " + rel.nodes[1]["uri"],
+            "source_id": rel.nodes[0]["uri"],
+            "target_id": rel.nodes[1]["uri"],
+            "tags" : [
+                {
+                    "type": "pp-prof",
+                    "urls": [],
+                    "val": rel.type
+                }
+            ]
+        }
+
+    for rel in data[0][0].relationships:
+        uri = rel.nodes[0]["uri"]
+        nodes[uri] = map_node(uri)
+        uri = rel.nodes[1]["uri"]
+        nodes[uri] = map_node(uri)
+        rels.append(map_rel(rel))
+
+    node_keys = map(lambda x: urllib.unquote(x), nodes.keys())
+    names = get_es_names(node_keys)
+
+    for node in nodes:
+        nodes[node]["name"] = names[urllib.unquote(nodes[node]["name"])]
+
+    return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": nodes.values(), "edges": rels}
 
 
 def get_shortest_path(name_1, name_2):
