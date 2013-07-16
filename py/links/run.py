@@ -18,12 +18,13 @@ for line in lines:
 from server.server import run
 from tests.graph_test import start
 
+"""start()"""
+
 
 max_attempts = 3
 for i in xrange(max_attempts):
     try:
         run()
-        #start()
     except:
         time.sleep(10)
 

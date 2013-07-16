@@ -18,7 +18,7 @@ from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
 from dom.graph.get_v2 import get as get_graph
 from dom.graph.get_shortest_path import get_shortest_path_neo as get_shortest_path
-from dom.graph.get_linked_nodes import get_linked_nodes
+from dom.graph.get_linked_nodes import get_linked_nodes_neo as get_linked_nodes
 from dom.graph.get_data import get as get_graph_data
 from dom.graph.patch import patch as patch_graph
 from dom.graph.post import post as post_graph

@@ -5,59 +5,17 @@ import os
 from dom.connection import get_db
 from  bson.objectid import ObjectId
 from py2neo import neo4j, cypher
-from es import elastic_search_v2 as es
 import urllib
 import re
-
-def get_es_names(keys):
-
-    q = """
-        {
-            "query": {
-                "bool": {
-                    "should": [{0}]
-                }
-            }
-        }
-        """
-
-    q_name = """
-                {
-                    "bool": {
-                        "must": {
-                            "match": {
-                                "key": "{0}"
-                            }
-                        },
-                        "must": {
-                            "match": {
-                                "lang": "en"
-                            }
-                        }
-                    }
-                }
-    """
-
-    r = q.replace("{0}", " , ".join(map(lambda key: q_name.replace("{0}", key), keys)))
-    print r
-
-    res = dict()
-    #lloking for longest names
-    for r in es.search("person-names,org-names", "dbpedia", r):
-        if len(res.get(r["key"], "")) < len(r["val"]):
-            res[r["key"]] = r["val"]
-    return res
+import es_names
 
 
 def get_shortest_path_neo(name_1, name_2):
     name_1 = name_1.encode("utf8")
     name_2 = name_2.encode("utf8")
-    hits_1 = es.get("person-names", "dbpedia", name_1, id_field_name="key")
-    hits_2 = es.get("person-names", "dbpedia", name_2, id_field_name="key")
-    if len(hits_1) > 0 and len(hits_2) > 0:
-        key_1 =  urllib.quote(hits_1[0][0], safe='~()*!.\'')
-        key_2 = urllib.quote(hits_2[0][0], safe='~()*!.\'')
-    else:
+    key_1 = es_names.get_es_keys(name_1)
+    key_2 = es_names.get_es_keys(name_2)
+    if not key_1 or not key_2:
         return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": [], "edges": []}
     graph_db = neo4j.GraphDatabaseService(os.getenv("NEO4J_URI"))
     query = "START n=node:wiki(\"uri:{}\"), m=node:wiki(\"uri:{}\") MATCH p = shortestPath(n-[*]-m) RETURN p;"\
@@ -105,7 +63,7 @@ def get_shortest_path_neo(name_1, name_2):
         rels.append(map_rel(rel))
 
     node_keys = map(lambda x: urllib.unquote(x), nodes.keys())
-    names = get_es_names(node_keys)
+    names = es_names.get_es_names(node_keys)
 
     for node in nodes:
         nodes[node]["name"] = names.get(nodes[node]["name"], node)
