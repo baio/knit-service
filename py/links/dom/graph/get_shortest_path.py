@@ -41,7 +41,7 @@ def get_es_names(keys):
 
     res = dict()
     #lloking for longest names
-    for r in es.search("person-names", "dbpedia", r):
+    for r in es.search("person-names,org-names", "dbpedia", r):
         if len(res.get(r["key"], "")) < len(r["val"]):
             res[r["key"]] = r["val"]
     return res
