@@ -7,6 +7,7 @@ from  bson.objectid import ObjectId
 from py2neo import neo4j, cypher
 from es import elastic_search_v2 as es
 import urllib
+import re
 
 def get_es_names(keys):
 
@@ -71,15 +72,24 @@ def get_shortest_path_neo(name_1, name_2):
         return {"id": node_name, "name": node_name, "meta" : {"pos" : [-1, -1]}}
 
     def map_rel(rel):
+        if rel.nodes[0]["type"] == "person": rel_type = "p"
+        if rel.nodes[0]["type"] == "org": rel_type = "o"
+        if rel.nodes[1]["type"] == "person": rel_type += "p"
+        if rel.nodes[1]["type"] == "org": rel_type += "o"
+        uri_1 = rel.nodes[0]["uri"]
+        uri_2 = rel.nodes[1]["uri"]
+        val =  urllib.unquote(rel.type).replace("da:","")
+        rel_url_dbpedia = urllib.unquote(uri_1)
+        rel_url_wikipedia = re.sub('http://dbpedia.org/resource/','http://en.wikipedia.org/wiki/',rel_url_dbpedia)
         return {
-            "id": rel.nodes[0]["uri"] + " " + rel.nodes[1]["uri"],
-            "source_id": rel.nodes[0]["uri"],
-            "target_id": rel.nodes[1]["uri"],
+            "id": uri_1 + " " + uri_2,
+            "source_id": uri_1,
+            "target_id": uri_2,
             "tags" : [
                 {
-                    "type": "pp-prof",
-                    "urls": [],
-                    "val": rel.type
+                    "type": rel_type + "-unk",
+                    "urls": [rel_url_dbpedia, rel_url_wikipedia],
+                    "val": val
                 }
             ]
         }
