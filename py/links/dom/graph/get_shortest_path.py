@@ -80,8 +80,10 @@ def get_shortest_path_neo(name_1, name_2):
         uri_1 = urllib.unquote(rel.nodes[0]["uri"])
         uri_2 = urllib.unquote(rel.nodes[1]["uri"])
         val =  urllib.unquote(rel.type).replace("da:","")
-        rel_url_dbpedia = uri_1
-        rel_url_wikipedia = re.sub('http://dbpedia.org/resource/','http://en.wikipedia.org/wiki/',rel_url_dbpedia)
+        rel_url_dbpedia_1 = uri_1
+        rel_url_wikipedia_1 = re.sub('http://dbpedia.org/resource/','http://en.wikipedia.org/wiki/',rel_url_dbpedia_1)
+        rel_url_dbpedia_2 = uri_2
+        rel_url_wikipedia_2 = re.sub('http://dbpedia.org/resource/','http://en.wikipedia.org/wiki/',rel_url_dbpedia_2)
         return {
             "id": uri_1 + " " + uri_2,
             "source_id": uri_1,
@@ -89,7 +91,7 @@ def get_shortest_path_neo(name_1, name_2):
             "tags" : [
                 {
                     "type": rel_type + "-unk",
-                    "urls": [rel_url_dbpedia, rel_url_wikipedia],
+                    "urls": [rel_url_dbpedia_1, rel_url_wikipedia_1, rel_url_dbpedia_2, rel_url_wikipedia_2],
                     "val": val
                 }
             ]
