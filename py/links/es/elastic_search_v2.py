@@ -11,7 +11,7 @@ _elastic_host_url = os.getenv("ES_URI", None)
 print _elastic_host_url
 
 def search(index, type, q):
-    res = req.post(_elastic_host_url + "/_search", data=q)
+    res = req.post(_elastic_host_url + "/_search?size=1000", data=q)
     content = yaml.load(res.content)
     return [h["_source"] for h in content["hits"]["hits"]]
 

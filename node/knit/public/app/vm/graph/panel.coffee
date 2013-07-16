@@ -50,6 +50,8 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
           return 0
         else if tags.filter((t) -> t.type.indexOf("po-") == 0).length
           return 2
+        else if tags.filter((t) -> t.type.indexOf("op-") == 0).length
+          return 2
         else if tags.filter((t) -> t.type.indexOf("oo-") == 0).length
           return 1
         else

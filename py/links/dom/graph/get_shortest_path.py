@@ -39,6 +39,7 @@ def get_es_names(keys):
     """
 
     r = q.replace("{0}", " , ".join(map(lambda key: q_name.replace("{0}", key), keys)))
+    print r
 
     res = dict()
     #lloking for longest names
@@ -76,10 +77,10 @@ def get_shortest_path_neo(name_1, name_2):
         if rel.nodes[0]["type"] == "org": rel_type = "o"
         if rel.nodes[1]["type"] == "person": rel_type += "p"
         if rel.nodes[1]["type"] == "org": rel_type += "o"
-        uri_1 = rel.nodes[0]["uri"]
-        uri_2 = rel.nodes[1]["uri"]
+        uri_1 = urllib.unquote(rel.nodes[0]["uri"])
+        uri_2 = urllib.unquote(rel.nodes[1]["uri"])
         val =  urllib.unquote(rel.type).replace("da:","")
-        rel_url_dbpedia = urllib.unquote(uri_1)
+        rel_url_dbpedia = uri_1
         rel_url_wikipedia = re.sub('http://dbpedia.org/resource/','http://en.wikipedia.org/wiki/',rel_url_dbpedia)
         return {
             "id": uri_1 + " " + uri_2,
@@ -95,9 +96,9 @@ def get_shortest_path_neo(name_1, name_2):
         }
 
     for rel in data[0][0].relationships:
-        uri = rel.nodes[0]["uri"]
+        uri = urllib.unquote(rel.nodes[0]["uri"])
         nodes[uri] = map_node(uri)
-        uri = rel.nodes[1]["uri"]
+        uri = urllib.unquote(rel.nodes[1]["uri"])
         nodes[uri] = map_node(uri)
         rels.append(map_rel(rel))
 
@@ -105,7 +106,7 @@ def get_shortest_path_neo(name_1, name_2):
     names = get_es_names(node_keys)
 
     for node in nodes:
-        nodes[node]["name"] = names[urllib.unquote(nodes[node]["name"])]
+        nodes[node]["name"] = names.get(nodes[node]["name"], node)
 
     return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": nodes.values(), "edges": rels}
 

@@ -104,6 +104,10 @@
           }).length) {
             return 2;
           } else if (tags.filter(function(t) {
+            return t.type.indexOf("op-") === 0;
+          }).length) {
+            return 2;
+          } else if (tags.filter(function(t) {
             return t.type.indexOf("oo-") === 0;
           }).length) {
             return 1;
