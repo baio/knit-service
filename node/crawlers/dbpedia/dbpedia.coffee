@@ -75,6 +75,9 @@ crawOpts =
       input: process.env.APP_NAME
     console:
       level: parseInt(process.env.CRAWLER_LOG_LEVEL_CONSOLE)
+  failed:
+    maxCount: parseInt(process.env.CRAWLER_FAILED_ATTEMPTS)
+    queue: process.env.CRAWLER_FAILED_QUEUE
 
 exports.start = (opts, done) ->
   _opts = opts

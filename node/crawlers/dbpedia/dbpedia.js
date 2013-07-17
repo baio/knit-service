@@ -121,6 +121,10 @@ require('nodetime').profile
       console: {
         level: parseInt(process.env.CRAWLER_LOG_LEVEL_CONSOLE)
       }
+    },
+    failed: {
+      maxCount: parseInt(process.env.CRAWLER_FAILED_ATTEMPTS),
+      queue: process.env.CRAWLER_FAILED_QUEUE
     }
   };
 

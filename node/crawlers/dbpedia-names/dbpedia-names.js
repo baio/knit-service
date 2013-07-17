@@ -112,7 +112,7 @@
     },
     failed: {
       maxCount: parseInt(process.env.CRAWLER_FAILED_ATTEMPTS),
-      queue: "crawler-dbpedia-name-pro-failed"
+      queue: process.env.CRAWLER_FAILED_QUEUE
     }
   };
 
