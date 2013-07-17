@@ -80,8 +80,23 @@
       val: process.env.CRAWLER_SKIP_INITIAL === "true" ? true : process.env.CRAWLER_SKIP_INITIAL === "false" ? void 0 : null
     },
     beforeQuery: function(opts) {
-      opts.qs.query = opts.qs.query.replace(/([^('])'([^)])/g, "$1\\'$2");
-      return opts.qs.query = opts.qs.query.replace(/<([^>]*)>/g, "iri('$1')");
+      var i, s, str, _i, _len, _ref;
+
+      str = "";
+      _ref = opts.qs.query;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        s = _ref[i];
+        if (s === "'") {
+          if (opts.qs.query[i - 1] === '(' || opts.qs.query[i + 1] === ')') {
+            str += "'";
+          } else {
+            str += "\\'";
+          }
+        } else {
+          str += s;
+        }
+      }
+      return opts.qs.query = str.replace(/<([^>]*)>/g, "iri('$1')");
     },
     log: {
       loggly: {
