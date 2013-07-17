@@ -65,7 +65,7 @@ def get_linked_nodes_neo(name):
     names = es_names.get_es_names(node_keys)
     """
     for node in nodes:
-        nodes[node]["name"] = re.sub(r"\/([^\/]*)$", r"\0", nodes[node]["name"])
+        nodes[node]["name"] = [m.group(1) for m in [re.search("\/([^\/]*)$",node)] if m][0].replace("_"," ")
         """names.get(nodes[node]["name"], node)"""
 
 
