@@ -66,6 +66,9 @@ crawOpts =
       input: process.env.APP_NAME
     console:
       level: parseInt(process.env.CRAWLER_LOG_LEVEL_CONSOLE)
+  failed:
+    maxCount: parseInt(process.env.CRAWLER_FAILED_ATTEMPTS)
+    queue: "crawler-dbpedia-name-pro-failed"
 
 exports.start = (done) ->
   crawOpts.amqp.queue = process.env.APP_NAME

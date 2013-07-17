@@ -66,6 +66,7 @@ def get_linked_nodes_neo(name):
     """
     for node in nodes:
         nodes[node]["name"] = [m.group(1) for m in [re.search("\/([^\/]*)$",node)] if m][0].replace("_"," ")
+        nodes[node]["name"] = urllib.unquote(nodes[node]["name"]).encode("utf8")
         """names.get(nodes[node]["name"], node)"""
 
 

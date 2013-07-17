@@ -128,13 +128,13 @@
             type = source_edge.tags[0].type;
             if (type.indexOf("pp-") === 0 || type.indexOf("po-") === 0) {
               return 0;
-            } else if (type.indexOf("oo-") === 0) {
+            } else if (type.indexOf("oo-") === 0 || type.indexOf("op-") === 0) {
               return 1;
             }
           }
           if (target_edge) {
             type = target_edge.tags[0].type;
-            if (type.indexOf("pp-") === 0) {
+            if (type.indexOf("pp-") === 0 || type.indexOf("op-") === 0) {
               return 0;
             } else if (type.indexOf("po-") === 0 || type.indexOf("oo-") === 0) {
               return 1;

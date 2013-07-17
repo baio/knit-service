@@ -92,6 +92,22 @@ parseData = (data, done) ->
   log.write log.LOG_CODE_PARSE_DATA, data : data
   _parse null, null, data, doneLog(log.LOG_CODE_PARSER_ERROR, _done)
 
+confirm = (data, ack) ->
+  (err) ->
+    if !err
+      ack()
+    else
+      if !_opts.failed
+        ack(true)
+      else
+        attempt = if data._failed_attempt then data._failed_attempt + 1 else 1
+        if attempt < _opts.failed.maxCount
+          data._failed_attempt = attempt
+          amqp.pub _opts.amqp.queue, data
+        else if _opts.failed.queue
+          amqp.pub _opts.failed.queue, data
+        ack()
+
 start = (opts, parse, done) ->
   _opts = opts
   _opts.slaveLevel ?= -1
@@ -106,9 +122,9 @@ start = (opts, parse, done) ->
             if _opts.slaveLevel == -1 or data.level == _opts.slaveLevel
               log.write log.LOG_CODE_AMQP_ON_POP, data
               if data.level != undefined
-                parseLevel data.level, data.url, ack
+                parseLevel data.level, data.url, confirm(data, ack)
               else
-                parseData data, ack
+                parseData data, confirm(data, ack)
             else
               #slave mode, ignore messages not from the slave level
               ack(true)
