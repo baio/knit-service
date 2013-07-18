@@ -42,14 +42,14 @@
           if (!err) {
             if (keys.people.length) {
               q.push(getPediaQueryData(queries.personNameReq.replace("{0}", (keys.people.map(function(m) {
-                return "?s=`iri('" + m + "')`";
+                return "?s=iri('" + m + "')";
               })).join(" or ")), 0, {
                 type: "person"
               }));
             }
             if (keys.orgs.length) {
               q.push(getPediaQueryData(queries.orgNameReq.replace("{0}", (keys.orgs.map(function(m) {
-                return "?s=`iri('" + m + "')`";
+                return "?s=iri('" + m + "')";
               })).join(" or ")), 0, {
                 type: "org"
               }));
