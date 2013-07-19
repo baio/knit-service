@@ -64,7 +64,6 @@
   };
 
   webQuery = function(opts, done) {
-    console.log(opts.qs.query);
     return req(opts, function(err, resp, body) {
       return done(err, body);
     });

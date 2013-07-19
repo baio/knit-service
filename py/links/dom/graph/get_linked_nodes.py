@@ -8,12 +8,24 @@ from py2neo import neo4j, cypher
 import urllib
 import re
 
+
+def get_fake_data(src_uri):
+    return [
+            [{"id" : 0}, [{"type" : "person"}], {"id" : 1}, src_uri, "yyy", "person", "org"],
+            [{"id" : 1}, [{"type" : "org"}], {"id" : 2}, "yyy", "zzz", "org", "org"]
+        ]
+
+
 def get_linked_nodes_neo(name):
     name = name.encode("utf8")
     graph_db = neo4j.GraphDatabaseService(os.getenv("NEO4J_URI"))
-    query = "start n=node:wiki(\"uri:{}\") match n-[r*1..2]-m return n, r, m, n.uri, m.uri, n.type, m.type"\
-        .format(urllib.quote(name, safe='~()*!.\''))
+    src_uri = urllib.quote(name, safe='~()*!.\'')
+    query = "start n=node:wiki(\"uri:{}\") match n-[r*1..1]-m return n, r, m, n.uri, m.uri, n.type, m.type"\
+        .format(src_uri)
+    print query
     data, metadata = cypher.execute(graph_db, query)
+
+    #data = get_fake_data(src_uri)
 
     nodes = dict()
     rels = []
@@ -21,7 +33,7 @@ def get_linked_nodes_neo(name):
     def map_node(node_name):
         return {"id": node_name, "name": node_name, "meta" : {"pos" : [-1, -1]}}
 
-    def map_rel(rel_type, res):
+    def map_rel(res):
         node_uri_1 = res[3]
         node_uri_2 = res[4]
         node_type_1 = res[5]
@@ -53,28 +65,21 @@ def get_linked_nodes_neo(name):
     #data=data[0:30]
 
     for rel in data:
-        if rel[0].id != rel[2].id:
+        if rel[3] != rel[4]: #rel[0].id != rel[2].id:
             uri = urllib.unquote(rel[3])
             nodes[uri] = map_node(uri)
             uri = urllib.unquote(rel[4])
             nodes[uri] = map_node(uri)
-            rels.append(map_rel(rel[1][0].type, rel))
+            rels.append(map_rel(rel))
 
     """
     node_keys = map(lambda x: urllib.unquote(x), nodes.keys())
-
     names = es_names.get_es_names(node_keys)
-    """
-
-    """
-    for node in nodes:
-        print node
     """
 
     for node in nodes:
         nodes[node]["name"] = [m.group(1) for m in [re.search("\/([^\/]*)$",node)] if m][0].replace("_"," ")
         nodes[node]["name"] = urllib.unquote(nodes[node]["name"]).encode("utf8")
-        """names.get(nodes[node]["name"], node)"""
 
 
     return {"nodes": nodes.values(), "edges": rels}
