@@ -7,7 +7,6 @@ from  bson.objectid import ObjectId
 from py2neo import neo4j, cypher
 import urllib
 import re
-import es_names
 
 def get_linked_nodes_neo(name):
     name = name.encode("utf8")
@@ -51,6 +50,8 @@ def get_linked_nodes_neo(name):
             ]
         }
 
+    #data=data[0:30]
+
     for rel in data:
         if rel[0].id != rel[2].id:
             uri = urllib.unquote(rel[3])
@@ -64,6 +65,12 @@ def get_linked_nodes_neo(name):
 
     names = es_names.get_es_names(node_keys)
     """
+
+    """
+    for node in nodes:
+        print node
+    """
+
     for node in nodes:
         nodes[node]["name"] = [m.group(1) for m in [re.search("\/([^\/]*)$",node)] if m][0].replace("_"," ")
         nodes[node]["name"] = urllib.unquote(nodes[node]["name"]).encode("utf8")

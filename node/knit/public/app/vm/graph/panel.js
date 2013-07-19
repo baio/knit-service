@@ -225,6 +225,14 @@
         }).attr("y2", function(d) {
           return d.target.meta.pos[1];
         }).on("mouseover", this.onHoverEdge).on("click", this.onClickEdge);
+        this.node = this.node.data(this.nodes);
+        this.node.enter().append("circle").attr("r", 5).attr("cx", function(d) {
+          return d.meta.pos[0];
+        }).attr("cy", function(d) {
+          return d.meta.pos[1];
+        }).attr("class", "node").style("fill", function(d) {
+          return color(d.group);
+        }).on("click", this.onClickNode);
         this.text = this.text.data(this.nodes);
         this.text.enter().append("text").attr("class", this.textCls).attr("text-anchor", "middle").text(function(d) {
           return d.name;
@@ -233,15 +241,16 @@
         }).attr("y", function(d) {
           return d.meta.pos[1] - 10;
         });
-        this.node = this.node.data(this.nodes);
-        this.node.enter().append("circle").attr("r", 5).attr("cx", function(d) {
-          return d.meta.pos[0];
-        }).attr("cy", function(d) {
-          return d.meta.pos[1];
-        }).attr("class", "link").style("fill", function(d) {
-          return color(d.group);
-        }).on("click", this.onClickNode);
+        d3.selectAll("line").order();
+        d3.selectAll("text").order();
+        d3.selectAll("circle").order();
         return this.setForceLayout(this.isForceLayout);
+        /*
+        d3.selectAll("line").order()
+        d3.selectAll("text").order()
+        d3.selectAll("circle").order()
+        */
+
       };
 
       Panel.prototype._tick = function() {
@@ -355,6 +364,7 @@
         this.isForceLayout = isForceLayout;
         if (isForceLayout) {
           this.node.call(this.force.drag);
+          this.text.call(this.force.drag);
           return this.force.start();
         } else {
           this.node.call(this._getDrag());

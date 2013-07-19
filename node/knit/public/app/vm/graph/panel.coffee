@@ -154,6 +154,21 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .on("mouseover", @onHoverEdge)
         .on("click", @onClickEdge)
 
+
+      @node = @node.data(@nodes)
+
+      @node
+        .enter()
+        .append("circle")
+        .attr("r", 5)
+        .attr("cx", (d) -> d.meta.pos[0])
+        .attr("cy", (d) -> d.meta.pos[1])
+        .attr("class", "node")
+        .style("fill", (d) -> color(d.group))
+        .on("click", @onClickNode)
+      #.call(@force.drag)
+
+
       @text = @text.data(@nodes)
 
       @text.enter()
@@ -164,28 +179,26 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .attr("x", (d) -> d.meta.pos[0])
         .attr("y", (d) -> d.meta.pos[1] - 10)
 
-      @node = @node.data(@nodes)
 
-      @node
-        .enter()
-        .append("circle")
-        .attr("r", 5)
-        .attr("cx", (d) -> d.meta.pos[0])
-        .attr("cy", (d) -> d.meta.pos[1])
-        .attr("class", "link")
-        .style("fill", (d) -> color(d.group))
-        .on("click", @onClickNode)
-        #.call(@force.drag)
+      d3.selectAll("line").order()
+      d3.selectAll("text").order()
+      d3.selectAll("circle").order()
 
       #@force.start()
       @setForceLayout(@isForceLayout)
 
+      ###
+      d3.selectAll("line").order()
+      d3.selectAll("text").order()
+      d3.selectAll("circle").order()
+      ###
+
     _tick: =>
       @link
-        .attr("x1", (d) => @_getX d.source.x)
-        .attr("y1", (d) => @_getY d.source.y)
-        .attr("x2", (d) => @_getX d.target.x)
-        .attr("y2", (d) => @_getY d.target.y)
+        .attr("x1", (d) => @_getX(d.source.x))
+        .attr("y1", (d) => @_getY(d.source.y))
+        .attr("x2", (d) => @_getX(d.target.x))
+        .attr("y2", (d) => @_getY(d.target.y))
       @node
         .attr("cx", (d) => @_getX d.x)
         .attr("cy", (d) => @_getY d.y)
@@ -214,6 +227,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       console.log "onclick node"
       @load src: node.id, (err, data) =>
         if !err
+          #d3.select("svg").remove()
           @data = data
           new_nodes = data.nodes.filter((f) => !@nodes.filter((g) -> f.id == g.id)[0])
           new_edges = data.edges.filter((f) => !@links.filter((g) -> f.id == g.id)[0])
@@ -239,6 +253,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
     setForceLayout: (@isForceLayout) ->
       if isForceLayout
         @node.call(@force.drag)
+        @text.call(@force.drag)
         @force.start()
       else
         @node.call(@_getDrag())
